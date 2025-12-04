@@ -9,22 +9,25 @@ import {
     SuratTafsir,
 } from '../services/quranApi';
 
-// ==================== HOOK: useSuratList ====================
 /**
  * Hook untuk mendapatkan daftar semua surat
+ * Error hanya ditampilkan setelah 5 detik untuk menghindari flash
  */
 export function useSuratList() {
     const [suratList, setSuratList] = useState<SuratListItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
+        let errorTimeout: ReturnType<typeof setTimeout>;
 
         async function fetchData() {
             try {
                 setLoading(true);
                 setError(null);
+                setShowError(false);
                 const data = await getAllSurat();
                 if (isMounted) {
                     setSuratList(data);
@@ -32,6 +35,12 @@ export function useSuratList() {
             } catch (err) {
                 if (isMounted) {
                     setError(err instanceof Error ? err.message : 'Gagal mengambil daftar surat');
+                    // Delay 5 detik sebelum menampilkan error
+                    errorTimeout = setTimeout(() => {
+                        if (isMounted) {
+                            setShowError(true);
+                        }
+                    }, 5000);
                 }
             } finally {
                 if (isMounted) {
@@ -44,23 +53,28 @@ export function useSuratList() {
 
         return () => {
             isMounted = false;
+            if (errorTimeout) clearTimeout(errorTimeout);
         };
     }, []);
 
     const refetch = useCallback(async () => {
         setLoading(true);
         setError(null);
+        setShowError(false);
         try {
             const data = await getAllSurat();
             setSuratList(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Gagal mengambil daftar surat');
+            // Langsung tampilkan error saat refetch manual
+            setShowError(true);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    return { suratList, loading, error, refetch };
+    // Hanya return error jika showError true (setelah 5 detik)
+    return { suratList, loading, error: showError ? error : null, refetch };
 }
 
 // ==================== HOOK: useJuz30Surat ====================
@@ -107,27 +121,32 @@ export function useJuz30Surat() {
 // ==================== HOOK: useSuratDetail ====================
 /**
  * Hook untuk mendapatkan detail surat dengan ayat-ayatnya
+ * Error hanya ditampilkan setelah 5 detik untuk menghindari flash
  * @param nomor - Nomor surat (1-114)
  */
 export function useSuratDetail(nomor: number | null) {
     const [surat, setSurat] = useState<SuratDetail | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         if (nomor === null) {
             setSurat(null);
             setLoading(false);
             setError(null);
+            setShowError(false);
             return;
         }
 
         let isMounted = true;
+        let errorTimeout: ReturnType<typeof setTimeout>;
 
         async function fetchData() {
             try {
                 setLoading(true);
                 setError(null);
+                setShowError(false);
                 const data = await getSuratDetail(nomor!);
                 if (isMounted) {
                     setSurat(data);
@@ -135,6 +154,12 @@ export function useSuratDetail(nomor: number | null) {
             } catch (err) {
                 if (isMounted) {
                     setError(err instanceof Error ? err.message : `Gagal mengambil surat ${nomor}`);
+                    // Delay 5 detik sebelum menampilkan error
+                    errorTimeout = setTimeout(() => {
+                        if (isMounted) {
+                            setShowError(true);
+                        }
+                    }, 5000);
                 }
             } finally {
                 if (isMounted) {
@@ -147,10 +172,12 @@ export function useSuratDetail(nomor: number | null) {
 
         return () => {
             isMounted = false;
+            if (errorTimeout) clearTimeout(errorTimeout);
         };
     }, [nomor]);
 
-    return { surat, loading, error };
+    // Hanya return error jika showError true (setelah 5 detik)
+    return { surat, loading, error: showError ? error : null };
 }
 
 // ==================== HOOK: useTafsir ====================
