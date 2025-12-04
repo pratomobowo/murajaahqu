@@ -197,7 +197,7 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
   return (
     <div className="flex flex-col h-full bg-slate-50 relative">
       {/* Quiz Header */}
-      <div className="bg-white px-4 py-4 shadow-sm border-b border-slate-100 z-10">
+      <div className="flex-none bg-white z-20 border-b border-slate-100 px-4 py-4 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button

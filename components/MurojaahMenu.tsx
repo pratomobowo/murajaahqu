@@ -66,12 +66,12 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
 
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <div className="px-6 py-6 pb-4">
+      <div className="flex-none bg-white z-20 border-b border-slate-100 px-6 py-4 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-800">Menu Murojaah</h1>
         <p className="text-slate-500 mt-1">Pilih kategori untuk memulai latihan hafalan.</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24 space-y-4">
         {menuItems.map((item) => (
           <button
             key={item.title}
@@ -86,9 +86,9 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
               <p className="text-sm text-slate-400 group-hover:text-slate-500 transition-colors">{item.subtitle}</p>
             </div>
             <div className="ml-auto text-slate-300">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-               </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
             </div>
           </button>
         ))}
