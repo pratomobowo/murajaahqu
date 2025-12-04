@@ -1,12 +1,25 @@
 import React from 'react';
 import { QuizMode, QuizType } from '../types';
 
+type MenuMode = QuizMode | 'HAFALAN';
+
 interface MurojaahMenuProps {
-  onSelectMode: (mode: QuizMode) => void;
+  onSelectMode: (mode: MenuMode) => void;
 }
 
 export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
-  const menuItems = [
+  const menuItems: { mode: MenuMode; title: string; subtitle: string; icon: React.ReactNode; color: string }[] = [
+    {
+      mode: 'HAFALAN',
+      title: 'Murajaah Hafalan Surat',
+      subtitle: 'Baca dan ulang hafalan surat',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+      ),
+      color: 'bg-gradient-to-br from-primary-500 to-emerald-500',
+    },
     {
       mode: 'RANDOM' as QuizMode,
       title: 'Murajaah Random',
