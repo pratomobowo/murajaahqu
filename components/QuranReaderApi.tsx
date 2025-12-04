@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSuratList, useSuratDetail, useAudio } from '../hooks/useQuran';
 import { SuratListItem, QariCode, QARI_INFO } from '../services/quranApi';
 
@@ -234,8 +234,8 @@ export function SuratDetailApi({
                                     onClick={() => toggle(ayat.audio[selectedQari])}
                                     disabled={audioLoading}
                                     className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm transition ${isPlaying && currentUrl === ayat.audio[selectedQari]
-                                            ? 'bg-emerald-500 text-white'
-                                            : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                                        ? 'bg-emerald-500 text-white'
+                                        : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
                                         } disabled:opacity-50`}
                                 >
                                     {isPlaying && currentUrl === ayat.audio[selectedQari] ? (

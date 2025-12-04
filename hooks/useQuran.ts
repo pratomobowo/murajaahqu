@@ -7,7 +7,6 @@ import {
     SuratListItem,
     SuratDetail,
     SuratTafsir,
-    QariCode,
 } from '../services/quranApi';
 
 // ==================== HOOK: useSuratList ====================
@@ -129,7 +128,7 @@ export function useSuratDetail(nomor: number | null) {
             try {
                 setLoading(true);
                 setError(null);
-                const data = await getSuratDetail(nomor);
+                const data = await getSuratDetail(nomor!);
                 if (isMounted) {
                     setSurat(data);
                 }
@@ -178,7 +177,7 @@ export function useTafsir(nomor: number | null) {
             try {
                 setLoading(true);
                 setError(null);
-                const data = await getTafsir(nomor);
+                const data = await getTafsir(nomor!);
                 if (isMounted) {
                     setTafsir(data);
                 }
