@@ -20,7 +20,7 @@ export const DalilView: React.FC = () => {
     return (
       <div className="flex flex-col h-full bg-slate-50">
         {/* Header Detail */}
-        <div className="flex-none sticky top-0 bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
+        <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
           <button
             onClick={() => setSelectedTopic(null)}
             className="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors"
@@ -75,7 +75,7 @@ export const DalilView: React.FC = () => {
   // Main Menu View
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <div className="flex-none sticky top-0 bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
+      <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
         <h1 className="text-2xl font-bold text-white">Kamus Dalil</h1>
         <p className="text-white/70 mt-1">Temukan ayat Al-Quran berdasarkan tema.</p>
 
