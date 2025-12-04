@@ -1,5 +1,4 @@
 import { Surah, DalilTopic } from './types';
-import React from 'react';
 
 export const SURAH_DATA: Surah[] = [
   { number: 1, latin: "Al-Fatihah", name: "الفاتحة", meaning: "Pembukaan", ayahs: 7, juz: 1, type: "Makkiyah" },
