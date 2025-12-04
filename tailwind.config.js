@@ -9,7 +9,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
-        arabic: ['Amiri', 'serif'],
+        arabic: ['"KFGQPC Uthmanic Script HAFS"', 'Amiri', 'serif'],
       },
       colors: {
         primary: {

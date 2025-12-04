@@ -79,7 +79,7 @@ export const InfoView: React.FC = () => {
                 </div>
 
                 {/* Developer Card */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-4">
                     <h3 className="font-semibold text-slate-800 mb-4">Pengembang</h3>
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center">
@@ -92,6 +92,38 @@ export const InfoView: React.FC = () => {
                             <p className="text-xs text-slate-500">Semoga Allah memudahkan kita dalam menjaga hafalan Al-Quran</p>
                         </div>
                     </div>
+                </div>
+
+                {/* Credits Card */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-4">
+                    <h3 className="font-semibold text-slate-800 mb-4">Sumber Data</h3>
+                    <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                            <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-emerald-600">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 className="font-medium text-slate-800 text-sm">EQuran.id API</h4>
+                                <p className="text-xs text-slate-500 mb-2">Data Al-Quran, terjemahan, dan audio murotal</p>
+                                <a
+                                    href="https://equran.id/apidev"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700"
+                                >
+                                    equran.id/apidev
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-4">
+                        Terima kasih kepada pengembang API yang telah menyediakan akses gratis untuk data Al-Quran.
+                    </p>
                 </div>
 
                 {/* Footer Note */}
