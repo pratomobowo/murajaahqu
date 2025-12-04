@@ -45,7 +45,7 @@ const SurahDetailView: React.FC<{
     if (loading || (!surat && !error)) {
         return (
             <div className="flex flex-col h-full bg-slate-50">
-                <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
+                <div className="flex-none bg-gradient-to-r from-teal-600 to-cyan-500 z-20 px-4 py-4 shadow-sm">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={onBack}
@@ -76,7 +76,7 @@ const SurahDetailView: React.FC<{
     if (!surat) {
         return (
             <div className="flex flex-col h-full bg-slate-50">
-                <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
+                <div className="flex-none bg-gradient-to-r from-teal-600 to-cyan-500 z-20 px-4 py-4 shadow-sm">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={onBack}
@@ -101,7 +101,7 @@ const SurahDetailView: React.FC<{
     return (
         <div className="flex flex-col h-full bg-slate-50">
             {/* Header */}
-            <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
+            <div className="flex-none bg-gradient-to-r from-teal-600 to-cyan-500 z-20 px-4 py-4 shadow-sm">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onBack}
@@ -214,7 +214,7 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
     if (loading || (suratList.length === 0 && !error)) {
         return (
             <div className="flex flex-col h-full bg-slate-50">
-                <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
+                <div className="flex-none bg-gradient-to-r from-teal-600 to-cyan-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
                     <button
                         onClick={onBack}
                         className="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors"
@@ -247,7 +247,7 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
     return (
         <div className="flex flex-col h-full bg-slate-50">
             {/* Header */}
-            <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
+            <div className="flex-none bg-gradient-to-r from-teal-600 to-cyan-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
                 <button
                     onClick={onBack}
                     className="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors"

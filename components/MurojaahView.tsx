@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import { MurojaahMenu } from './MurojaahMenu';
 import { Quiz } from './Quiz';
 import { HafalanView } from './HafalanView';
+import { TebakAyatQuiz } from './TebakAyatQuiz';
 import { QuizMode } from '../types';
 
-type ViewMode = QuizMode | 'HAFALAN' | null;
+type ViewMode = QuizMode | 'HAFALAN' | 'TEBAK_AYAT' | null;
 
 export const MurojaahView: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState<ViewMode>(null);
 
   if (selectedMode === 'HAFALAN') {
     return <HafalanView onBack={() => setSelectedMode(null)} />;
+  }
+
+  if (selectedMode === 'TEBAK_AYAT') {
+    return <TebakAyatQuiz onBack={() => setSelectedMode(null)} />;
   }
 
   if (selectedMode) {

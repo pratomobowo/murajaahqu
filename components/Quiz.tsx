@@ -192,12 +192,23 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
     }
   }
 
+  const getHeaderColor = () => {
+    switch (mode) {
+      case 'RANDOM': return 'from-primary-600 to-primary-500';
+      case QuizType.NUMBER: return 'from-indigo-600 to-indigo-500';
+      case QuizType.MEANING: return 'from-emerald-600 to-teal-500';
+      case QuizType.AYAH_COUNT: return 'from-amber-600 to-orange-500';
+      case QuizType.JUZ: return 'from-rose-600 to-pink-500';
+      default: return 'from-primary-600 to-primary-500';
+    }
+  }
+
   if (!question) return <div className="p-10 text-center">Memuat...</div>;
 
   return (
     <div className="flex flex-col h-full bg-slate-50 relative">
       {/* Quiz Header */}
-      <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
+      <div className={`flex-none bg-gradient-to-r ${getHeaderColor()} z-20 px-4 py-4 shadow-sm`}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button

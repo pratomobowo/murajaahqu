@@ -14,7 +14,8 @@ export enum QuizType {
   MEANING = 'MEANING',
   NUMBER = 'NUMBER',
   AYAH_COUNT = 'AYAH_COUNT',
-  JUZ = 'JUZ'
+  JUZ = 'JUZ',
+  TEBAK_AYAT = 'TEBAK_AYAT'
 }
 
 export type QuizMode = QuizType | 'RANDOM';
