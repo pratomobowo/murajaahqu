@@ -4,7 +4,7 @@ import { SURAH_DATA } from '../constants';
 export const SurahList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredSurahs = SURAH_DATA.filter(surah => 
+  const filteredSurahs = SURAH_DATA.filter(surah =>
     surah.latin.toLowerCase().includes(searchTerm.toLowerCase()) ||
     surah.meaning.toLowerCase().includes(searchTerm.toLowerCase()) ||
     surah.number.toString().includes(searchTerm)
@@ -13,19 +13,19 @@ export const SurahList: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-slate-50">
       {/* Fixed Header */}
-      <div className="flex-none bg-white z-20 border-b border-slate-100 px-6 py-4 shadow-sm">
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Daftar Surat</h1>
-        <p className="text-slate-500 text-sm mt-1">114 Surat • 30 Juz</p>
-        
+      <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Daftar Surat</h1>
+        <p className="text-white/70 text-sm mt-1">114 Surat • 30 Juz</p>
+
         <div className="mt-4 relative">
-          <input 
-            type="text" 
-            placeholder="Cari surat, arti, atau nomor..." 
-            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
+          <input
+            type="text"
+            placeholder="Cari surat, arti, atau nomor..."
+            className="w-full pl-10 pr-4 py-3 bg-white/20 border border-white/30 rounded-xl text-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 transition-all"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white/60 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
@@ -39,9 +39,9 @@ export const SurahList: React.FC = () => {
               <div className="flex items-center gap-4">
                 {/* Number Badge */}
                 <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-600 font-semibold text-sm group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">
-                   {surah.number}
+                  {surah.number}
                 </div>
-                
+
                 {/* Info */}
                 <div>
                   <h3 className="font-semibold text-slate-800 text-base">{surah.latin}</h3>
@@ -59,14 +59,14 @@ export const SurahList: React.FC = () => {
                 <p className="text-xs text-slate-400 font-medium">{surah.meaning}</p>
               </div>
             </div>
-            
+
             {/* Juz Badge (Bottom Strip) */}
             <div className="mt-3 pt-3 border-t border-slate-50 flex justify-between items-center">
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Juz {surah.juz}</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Juz {surah.juz}</span>
             </div>
           </div>
         ))}
-        
+
         {filteredSurahs.length === 0 && (
           <div className="text-center py-12 text-slate-400">
             <p>Surat tidak ditemukan.</p>

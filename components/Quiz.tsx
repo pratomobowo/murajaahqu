@@ -197,20 +197,20 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
   return (
     <div className="flex flex-col h-full bg-slate-50 relative">
       {/* Quiz Header */}
-      <div className="flex-none bg-white z-20 border-b border-slate-100 px-4 py-4 shadow-sm">
+      <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
             </button>
             <div>
-              <h2 className="font-bold text-slate-800 text-lg leading-tight">{getTitle()}</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="font-bold text-white text-lg leading-tight">{getTitle()}</h2>
+              <p className="text-xs text-white/70">
                 {selectedJuz.length === 30 ? 'Semua Juz' : `${selectedJuz.length} Juz Dipilih`}
               </p>
             </div>
@@ -218,7 +218,7 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
 
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-primary-600 transition-colors"
+            className="p-2 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
@@ -228,23 +228,23 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
 
         <div className="flex justify-between items-center mb-4">
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Streak</span>
+            <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Streak</span>
             <div className="flex items-center gap-1">
-              <span className="text-2xl font-bold text-slate-800">{stats.streak}</span>
-              <span className="text-amber-500 text-lg">🔥</span>
+              <span className="text-2xl font-bold text-white">{stats.streak}</span>
+              <span className="text-amber-300 text-lg">🔥</span>
             </div>
           </div>
           <div className="text-right">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Akurasi</span>
-            <div className="text-xl font-bold text-slate-800">
+            <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Akurasi</span>
+            <div className="text-xl font-bold text-white">
               {stats.totalAnswered > 0 ? Math.round((stats.correct / stats.totalAnswered) * 100) : 0}%
             </div>
           </div>
         </div>
 
-        <div className="w-full bg-slate-100 rounded-full h-1.5 mb-2">
+        <div className="w-full bg-white/20 rounded-full h-1.5 mb-2">
           <div
-            className="bg-primary-500 h-1.5 rounded-full transition-all duration-500"
+            className="bg-white h-1.5 rounded-full transition-all duration-500"
             style={{ width: `${Math.min(stats.streak * 5, 100)}%` }}
           ></div>
         </div>
