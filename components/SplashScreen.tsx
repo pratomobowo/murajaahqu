@@ -30,17 +30,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
                 <p className="text-white/80 text-center text-lg mb-2">
                     Aplikasi Latihan Hafalan Al-Quran
                 </p>
-                <p className="text-white/60 text-center text-sm max-w-xs">
+                <p className="text-white/60 text-center text-sm max-w-xs mb-10">
                     Tingkatkan hafalan surat, nomor, arti, dan jumlah ayat dengan cara yang menyenangkan
                 </p>
-            </div>
 
-            {/* Bottom Section */}
-            <div className="px-8 pb-12 relative z-10">
                 {/* Start Button */}
                 <button
                     onClick={onStart}
-                    className="w-full py-4 bg-white text-primary-600 font-bold text-lg rounded-2xl shadow-lg shadow-primary-800/30 hover:bg-primary-50 active:scale-[0.98] transition-all mb-8"
+                    className="w-full max-w-xs py-4 bg-white text-primary-600 font-bold text-lg rounded-2xl shadow-lg shadow-primary-800/30 hover:bg-primary-50 active:scale-[0.98] transition-all mb-6"
                 >
                     Mulai Murajaah
                 </button>
