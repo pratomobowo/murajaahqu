@@ -4,18 +4,24 @@ import { DalilTopic } from '../types';
 
 export const DalilView: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<DalilTopic | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Helper to find surah details
   const getSurahDetails = (surahNumber: number) => {
     return SURAH_DATA.find(s => s.number === surahNumber);
   };
 
+  const filteredTopics = DALIL_DATA.filter(topic =>
+    topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    topic.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (selectedTopic) {
     return (
       <div className="flex flex-col h-full bg-slate-50">
         {/* Header Detail */}
-        <div className="bg-white px-4 py-4 shadow-sm border-b border-slate-100 flex items-center gap-4">
-          <button 
+        <div className="flex-none sticky top-0 bg-white z-20 border-b border-slate-100 px-4 py-4 shadow-sm flex items-center gap-4">
+          <button
             onClick={() => setSelectedTopic(null)}
             className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
           >
@@ -33,26 +39,26 @@ export const DalilView: React.FC = () => {
         <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-3">
           {selectedTopic.verses.map((verse, index) => {
             const surah = getSurahDetails(verse.surahNumber);
-            
+
             return (
               <div key={index} className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-start justify-between mb-3">
-                   <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm ${selectedTopic.color}`}>
-                        {verse.surahNumber}
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-slate-800 text-base">
-                          {surah ? surah.latin : `Surat #${verse.surahNumber}`}
-                        </h3>
-                        <p className="text-xs text-slate-500">Ayat {verse.ayah}</p>
-                      </div>
-                   </div>
-                   {surah && (
-                     <span className="font-arabic text-xl text-primary-600">{surah.name}</span>
-                   )}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm ${selectedTopic.color}`}>
+                      {verse.surahNumber}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-800 text-base">
+                        {surah ? surah.latin : `Surat #${verse.surahNumber}`}
+                      </h3>
+                      <p className="text-xs text-slate-500">Ayat {verse.ayah}</p>
+                    </div>
+                  </div>
+                  {surah && (
+                    <span className="font-arabic text-xl text-primary-600">{surah.name}</span>
+                  )}
                 </div>
-                
+
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
                   <p className="text-sm text-slate-600 leading-relaxed italic">
                     "{verse.description}"
@@ -69,13 +75,26 @@ export const DalilView: React.FC = () => {
   // Main Menu View
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <div className="px-6 py-6 pb-4">
+      <div className="flex-none sticky top-0 bg-white z-20 border-b border-slate-100 px-6 py-4 shadow-sm">
         <h1 className="text-2xl font-bold text-slate-800">Kamus Dalil</h1>
         <p className="text-slate-500 mt-1">Temukan ayat Al-Quran berdasarkan tema.</p>
+
+        <div className="mt-4 relative">
+          <input
+            type="text"
+            placeholder="Cari tema dalil..."
+            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pb-24 space-y-4">
-        {DALIL_DATA.map((topic) => (
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24 space-y-4">
+        {filteredTopics.map((topic) => (
           <button
             key={topic.id}
             onClick={() => setSelectedTopic(topic)}
@@ -94,9 +113,9 @@ export const DalilView: React.FC = () => {
               </p>
             </div>
             <div className="text-slate-300">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-               </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
             </div>
           </button>
         ))}

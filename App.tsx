@@ -10,7 +10,7 @@ function App() {
 
   return (
     <Layout>
-      <main className="h-screen overflow-hidden">
+      <main className="flex-1 overflow-hidden">
         {activeTab === 'study' && <SurahList />}
         {activeTab === 'quiz' && <MurojaahView />}
         {activeTab === 'dalil' && <DalilView />}
