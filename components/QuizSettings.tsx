@@ -10,13 +10,24 @@ interface QuizSettingsProps {
 export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, currentSelectedJuz, onSave }) => {
   const [tempSelected, setTempSelected] = useState<number[]>(currentSelectedJuz);
   const [showManual, setShowManual] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  // Sync state when modal opens
+  // Handle open/close animations
   useEffect(() => {
     if (isOpen) {
+      setIsVisible(true);
+      setIsClosing(false);
       setTempSelected(currentSelectedJuz);
+    } else if (isVisible) {
+      setIsClosing(true);
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        setIsClosing(false);
+      }, 300); // Match animation duration
+      return () => clearTimeout(timer);
     }
-  }, [isOpen, currentSelectedJuz]);
+  }, [isOpen, currentSelectedJuz, isVisible]);
 
   const toggleJuz = (juz: number) => {
     setTempSelected(prev => {
@@ -45,18 +56,20 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
     { label: 'Juz 1 - 5', range: [1, 2, 3, 4, 5] },
   ];
 
-  if (!isOpen) return null;
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+    <div className="fixed top-0 left-0 right-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-40 flex items-end justify-center sm:items-center pointer-events-none">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+      <div
+        className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto ${isClosing ? 'opacity-0' : 'opacity-100'
+          }`}
         onClick={onClose}
       ></div>
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl animate-slide-up max-h-[85vh] flex flex-col">
+      <div className={`relative w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[85vh] flex flex-col pointer-events-auto ${isClosing ? 'animate-slide-down' : 'animate-slide-up'
+        }`}>
         {/* Handle bar */}
         <div className="mx-auto w-12 h-1.5 bg-slate-200 rounded-full mt-3 mb-4"></div>
 
@@ -66,38 +79,37 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
         </div>
 
         <div className="overflow-y-auto flex-1 no-scrollbar px-6 py-4 space-y-6">
-          
+
           {/* Presets Section */}
           <div className="space-y-3">
-             <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pilihan Cepat</label>
-             <div className="grid grid-cols-1 gap-2">
-               {presets.map((preset) => {
-                 const isSelected = JSON.stringify(tempSelected) === JSON.stringify(preset.range);
-                 return (
-                   <button
-                     key={preset.label}
-                     onClick={() => applyPreset(preset.range)}
-                     className={`w-full py-3 px-4 rounded-xl text-left font-medium transition-all flex items-center justify-between ${
-                        isSelected 
-                        ? 'bg-primary-50 text-primary-700 ring-1 ring-primary-500' 
+            <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pilihan Cepat</label>
+            <div className="grid grid-cols-1 gap-2">
+              {presets.map((preset) => {
+                const isSelected = JSON.stringify(tempSelected) === JSON.stringify(preset.range);
+                return (
+                  <button
+                    key={preset.label}
+                    onClick={() => applyPreset(preset.range)}
+                    className={`w-full py-3 px-4 rounded-xl text-left font-medium transition-all flex items-center justify-between ${isSelected
+                        ? 'bg-primary-50 text-primary-700 ring-1 ring-primary-500'
                         : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
-                     }`}
-                   >
-                     <span>{preset.label}</span>
-                     {isSelected && (
-                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-primary-600">
-                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                       </svg>
-                     )}
-                   </button>
-                 );
-               })}
-             </div>
+                      }`}
+                  >
+                    <span>{preset.label}</span>
+                    {isSelected && (
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-primary-600">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Manual Selection Accordion */}
           <div>
-            <button 
+            <button
               onClick={() => setShowManual(!showManual)}
               className="w-full flex items-center justify-between py-2 text-slate-500 font-medium hover:text-slate-800 transition-colors"
             >
@@ -106,7 +118,7 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
             </button>
-            
+
             {showManual && (
               <div className="grid grid-cols-5 gap-2 mt-3 animate-fade-in pb-2">
                 {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => {
@@ -115,11 +127,10 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
                     <button
                       key={num}
                       onClick={() => toggleJuz(num)}
-                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold transition-all ${
-                        isSelected 
-                          ? 'bg-primary-500 text-white shadow-sm' 
+                      className={`aspect-square rounded-lg flex items-center justify-center text-sm font-bold transition-all ${isSelected
+                          ? 'bg-primary-500 text-white shadow-sm'
                           : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
-                      }`}
+                        }`}
                     >
                       {num}
                     </button>
@@ -128,7 +139,7 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
               </div>
             )}
           </div>
-          
+
         </div>
 
         {/* Footer Actions - Seamless integration without border */}
@@ -153,8 +164,15 @@ export const QuizSettings: React.FC<QuizSettingsProps> = ({ isOpen, onClose, cur
           from { transform: translateY(100%); }
           to { transform: translateY(0); }
         }
+        @keyframes slide-down {
+          from { transform: translateY(0); }
+          to { transform: translateY(100%); }
+        }
         .animate-slide-up {
-          animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-slide-down {
+          animation: slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes fade-in {
           from { opacity: 0; }
