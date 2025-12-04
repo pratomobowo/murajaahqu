@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Surah, QuizType, Question, Stats, QuizMode } from '../types';
 import { SURAH_DATA } from '../constants';
 import confetti from 'canvas-confetti';
 import { QuizSettings } from './QuizSettings';
+
+const TIMER_SECONDS = 10;
 
 interface QuizProps {
   mode: QuizMode;
@@ -14,6 +16,8 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Settings State
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -132,14 +136,49 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
     setSelectedOption(null);
     setIsAnswered(false);
     setIsCorrect(false);
+    setTimeLeft(TIMER_SECONDS);
   }, [mode, selectedJuz]);
 
   useEffect(() => {
     generateQuestion();
   }, [generateQuestion]);
 
+  // Timer countdown effect
+  useEffect(() => {
+    if (isAnswered || !question) return;
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          // Time's up - auto-mark as wrong
+          clearInterval(timerRef.current!);
+          setIsAnswered(true);
+          setIsCorrect(false);
+          setStats(s => ({
+            ...s,
+            totalAnswered: s.totalAnswered + 1,
+            streak: 0
+          }));
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [question, isAnswered]);
+
   const handleAnswer = (surah: Surah) => {
     if (isAnswered || !question) return;
+
+    // Stop timer when answered
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
 
     const correct = surah.number === question.correctAnswer.number;
     setIsAnswered(true);
@@ -245,6 +284,12 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
               <span className="text-amber-300 text-lg">🔥</span>
             </div>
           </div>
+          <div className="text-center">
+            <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Timer</span>
+            <div className={`text-2xl font-bold ${timeLeft <= 3 ? 'text-red-300 animate-pulse' : 'text-white'}`}>
+              {isAnswered ? '—' : timeLeft}
+            </div>
+          </div>
           <div className="text-right">
             <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Akurasi</span>
             <div className="text-xl font-bold text-white">
@@ -255,8 +300,8 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
 
         <div className="w-full bg-white/20 rounded-full h-1.5 mb-2">
           <div
-            className="bg-white h-1.5 rounded-full transition-all duration-500"
-            style={{ width: `${Math.min(stats.streak * 5, 100)}%` }}
+            className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 3 ? 'bg-red-400' : 'bg-white'}`}
+            style={{ width: isAnswered ? '0%' : `${(timeLeft / TIMER_SECONDS) * 100}%` }}
           ></div>
         </div>
       </div>

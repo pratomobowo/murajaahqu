@@ -4,6 +4,8 @@ import { QURAN_HAFALAN_DATA, QuranSurah } from '../quranData';
 import { getAyatAudioUrl, QariCode } from '../services/quranApi';
 import confetti from 'canvas-confetti';
 
+const TIMER_SECONDS = 10;
+
 interface TebakAyatQuizProps {
     onBack: () => void;
 }
@@ -23,7 +25,10 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null); // null = timer not started
+    const [isTimerActive, setIsTimerActive] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     const [stats, setStats] = useState<Stats>(() => {
         try {
@@ -76,6 +81,14 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
         setIsCorrect(false);
         setIsPlaying(false);
         setHasPlayedOnce(false);
+        setTimeLeft(null);
+        setIsTimerActive(false);
+
+        // Stop timer if running
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
 
         // Stop current audio if playing
         if (audioRef.current) {
@@ -87,6 +100,36 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
     useEffect(() => {
         generateQuestion();
     }, [generateQuestion]);
+
+    // Timer countdown effect - starts when isTimerActive becomes true
+    useEffect(() => {
+        if (!isTimerActive || isAnswered || timeLeft === null) return;
+
+        timerRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev === null || prev <= 1) {
+                    // Time's up - auto-mark as wrong
+                    clearInterval(timerRef.current!);
+                    setIsTimerActive(false);
+                    setIsAnswered(true);
+                    setIsCorrect(false);
+                    setStats(s => ({
+                        ...s,
+                        totalAnswered: s.totalAnswered + 1,
+                        streak: 0
+                    }));
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+        };
+    }, [isTimerActive, isAnswered, timeLeft]);
 
     const playAudio = () => {
         if (!question) return;
@@ -108,6 +151,11 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
         audio.addEventListener('ended', () => {
             setIsPlaying(false);
             setHasPlayedOnce(true);
+            // Start timer after audio ends (only first play)
+            if (!isAnswered) {
+                setTimeLeft(TIMER_SECONDS);
+                setIsTimerActive(true);
+            }
         });
 
         audio.addEventListener('error', () => {
@@ -128,6 +176,12 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
 
     const handleAnswer = (surah: QuranSurah) => {
         if (isAnswered || !question) return;
+
+        // Stop timer when answered
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+        }
+        setIsTimerActive(false);
 
         const correct = surah.number === question.surah.number;
         setIsAnswered(true);
@@ -204,6 +258,12 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
                             <span className="text-amber-300 text-lg">🔥</span>
                         </div>
                     </div>
+                    <div className="text-center">
+                        <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Timer</span>
+                        <div className={`text-2xl font-bold ${timeLeft !== null && timeLeft <= 3 ? 'text-red-300 animate-pulse' : 'text-white'}`}>
+                            {isAnswered || timeLeft === null ? '—' : timeLeft}
+                        </div>
+                    </div>
                     <div className="text-right">
                         <span className="text-xs font-bold text-white/60 uppercase tracking-wider">Akurasi</span>
                         <div className="text-xl font-bold text-white">
@@ -214,8 +274,8 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
 
                 <div className="w-full bg-white/20 rounded-full h-1.5 mb-2">
                     <div
-                        className="bg-white h-1.5 rounded-full transition-all duration-500"
-                        style={{ width: `${Math.min(stats.streak * 5, 100)}%` }}
+                        className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft !== null && timeLeft <= 3 ? 'bg-red-400' : 'bg-white'}`}
+                        style={{ width: isAnswered ? '0%' : (timeLeft === null ? '100%' : `${(timeLeft / TIMER_SECONDS) * 100}%`) }}
                     ></div>
                 </div>
             </div>
@@ -238,10 +298,10 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
                             onClick={isPlaying ? stopAudio : playAudio}
                             disabled={isLoading}
                             className={`w-full py-4 px-6 rounded-xl font-bold text-white shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-3 mb-4 ${isLoading
-                                    ? 'bg-slate-400 cursor-not-allowed'
-                                    : isPlaying
-                                        ? 'bg-red-500 hover:bg-red-600'
-                                        : 'bg-violet-600 hover:bg-violet-700 shadow-violet-500/30'
+                                ? 'bg-slate-400 cursor-not-allowed'
+                                : isPlaying
+                                    ? 'bg-red-500 hover:bg-red-600'
+                                    : 'bg-violet-600 hover:bg-violet-700 shadow-violet-500/30'
                                 }`}
                         >
                             {isLoading ? (
