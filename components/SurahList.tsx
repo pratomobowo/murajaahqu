@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { useSuratList, useSuratDetail } from '../hooks/useQuran';
+import { useSuratList, useSuratDetail, useAudio } from '../hooks/useQuran';
+
+// Qari tetap: Yasser Al-Dosari (kode '06')
+const QARI = '06' as const;
 
 // ==================== SurahDetailView Component ====================
 const SurahDetailView: React.FC<{
@@ -8,6 +11,7 @@ const SurahDetailView: React.FC<{
 }> = ({ suratNomor, onBack }) => {
   const { surat, loading, error } = useSuratDetail(suratNomor);
   const [showTranslation, setShowTranslation] = useState(false);
+  const { toggle, isPlaying, currentUrl, loading: audioLoading } = useAudio();
 
   // Loading state
   if (loading) {
@@ -30,8 +34,13 @@ const SurahDetailView: React.FC<{
     );
   }
 
-  // Error state
-  if (error || !surat) {
+  // DEBUG: Log error ke console, tidak tampilkan UI error
+  if (error) {
+    console.log('SurahDetailView Error:', error);
+  }
+
+  // Jika surat null, tampilkan loading
+  if (!surat) {
     return (
       <div className="flex flex-col h-full bg-slate-50">
         <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
@@ -41,16 +50,11 @@ const SurahDetailView: React.FC<{
             </svg>
           </button>
           <div className="flex-1">
-            <h2 className="font-bold text-white text-lg">Error</h2>
+            <h2 className="font-bold text-white text-lg">Memuat...</h2>
           </div>
         </div>
-        <div className="flex-1 flex items-center justify-center p-4">
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-            <p className="text-red-600 mb-3">Gagal memuat surat. {error}</p>
-            <button onClick={onBack} className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-              Kembali
-            </button>
-          </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       </div>
     );
@@ -73,13 +77,39 @@ const SurahDetailView: React.FC<{
           <span className="font-arabic text-2xl text-white" dir="rtl">{surat.nama}</span>
         </div>
 
-        {/* Toggle Translation Button */}
-        <button
-          onClick={() => setShowTranslation(!showTranslation)}
-          className="mt-3 w-full py-2 bg-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/30 transition-colors"
-        >
-          {showTranslation ? 'Sembunyikan Terjemahan' : 'Lihat Terjemahan'}
-        </button>
+        {/* Buttons Row - Dengar & Terjemahan */}
+        <div className="mt-3 flex gap-2">
+          {/* Audio Player - Play Full Surah Button */}
+          <button
+            onClick={() => toggle(surat.audioFull[QARI])}
+            disabled={audioLoading}
+            className="flex-1 flex items-center justify-center gap-2 py-2 bg-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/30 transition-colors disabled:opacity-50"
+          >
+            {audioLoading ? (
+              <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            ) : isPlaying && currentUrl === surat.audioFull[QARI] ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+            )}
+            <span>{isPlaying && currentUrl === surat.audioFull[QARI] ? 'Pause' : 'Dengar'}</span>
+          </button>
+
+          {/* Toggle Translation Button */}
+          <button
+            onClick={() => setShowTranslation(!showTranslation)}
+            className="flex-1 py-2 bg-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/30 transition-colors"
+          >
+            {showTranslation ? 'Sembunyikan' : 'Terjemahan'}
+          </button>
+        </div>
       </div>
 
       {/* Content */}
@@ -114,10 +144,32 @@ const SurahDetailView: React.FC<{
                   )}
                 </div>
 
-                {/* Verse Number */}
-                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-sm font-semibold" dir="ltr">
-                  {ayat.nomorAyat}
-                </span>
+                {/* Play Icon & Verse Number */}
+                <div className="flex flex-col items-center gap-1" dir="ltr">
+                  {/* Play Button */}
+                  <button
+                    onClick={() => toggle(ayat.audio[QARI])}
+                    disabled={audioLoading}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${isPlaying && currentUrl === ayat.audio[QARI]
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-primary-100 text-primary-600 hover:bg-primary-200'
+                      }`}
+                  >
+                    {isPlaying && currentUrl === ayat.audio[QARI] ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                      </svg>
+                    )}
+                  </button>
+                  {/* Verse Number */}
+                  <span className="text-xs text-primary-600 font-semibold">
+                    {ayat.nomorAyat}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
@@ -127,9 +179,11 @@ const SurahDetailView: React.FC<{
   );
 };
 
+
+
 // ==================== Main SurahList Component ====================
 export const SurahList: React.FC = () => {
-  const { suratList, loading, error, refetch } = useSuratList();
+  const { suratList, loading, error } = useSuratList();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSuratNomor, setSelectedSuratNomor] = useState<number | null>(null);
 
@@ -163,24 +217,9 @@ export const SurahList: React.FC = () => {
     );
   }
 
-  // Error state - hanya tampilkan jika benar-benar error dan tidak loading
-  if (error && suratList.length === 0) {
-    return (
-      <div className="flex flex-col h-full bg-slate-50">
-        <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
-          <h1 className="text-2xl font-bold text-white tracking-tight">Daftar Surat</h1>
-          <p className="text-white/70 text-sm mt-1">Terjadi kesalahan</p>
-        </div>
-        <div className="flex-1 flex items-center justify-center p-4">
-          <div className="bg-slate-100 border border-slate-200 rounded-xl p-6 text-center max-w-sm">
-            <p className="text-slate-600 mb-4">Gagal memuat daftar surat. Pastikan Anda terhubung ke internet.</p>
-            <button onClick={refetch} className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition">
-              Coba Lagi
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  // DEBUG: Log error ke console, tidak tampilkan UI error
+  if (error) {
+    console.log('SurahList Error:', error);
   }
 
   // List View

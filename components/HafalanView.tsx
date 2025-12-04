@@ -41,8 +41,8 @@ const SurahDetailView: React.FC<{
         setRevealedVerses(newRevealed);
     };
 
-    // Loading state
-    if (loading) {
+    // Loading state - tampilkan loading jika sedang loading ATAU surat belum ada (dan tidak ada error)
+    if (loading || (!surat && !error)) {
         return (
             <div className="flex flex-col h-full bg-slate-50">
                 <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
@@ -67,8 +67,13 @@ const SurahDetailView: React.FC<{
         );
     }
 
-    // Error state
-    if (error || !surat) {
+    // DEBUG: Log error ke console, tidak tampilkan UI error
+    if (error) {
+        console.log('SurahDetailView Error:', error);
+    }
+
+    // Jika surat masih null, tetap tampilkan loading
+    if (!surat) {
         return (
             <div className="flex flex-col h-full bg-slate-50">
                 <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm">
@@ -82,20 +87,12 @@ const SurahDetailView: React.FC<{
                             </svg>
                         </button>
                         <div className="flex-1">
-                            <h2 className="font-bold text-white text-lg">Error</h2>
+                            <h2 className="font-bold text-white text-lg">Memuat...</h2>
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 flex items-center justify-center p-4">
-                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-                        <p className="text-red-600 mb-3">Gagal memuat surat. {error}</p>
-                        <button
-                            onClick={onBack}
-                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-                        >
-                            Kembali
-                        </button>
-                    </div>
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
                 </div>
             </div>
         );
@@ -241,37 +238,9 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
         );
     }
 
-    // Error state - hanya tampilkan jika benar-benar error dan data kosong
-    if (error && suratList.length === 0) {
-        return (
-            <div className="flex flex-col h-full bg-slate-50">
-                <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-4 py-4 shadow-sm flex items-center gap-4">
-                    <button
-                        onClick={onBack}
-                        className="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                        </svg>
-                    </button>
-                    <div>
-                        <h2 className="font-bold text-white text-lg">Murajaah Hafalan</h2>
-                        <p className="text-xs text-white/70">Terjadi kesalahan</p>
-                    </div>
-                </div>
-                <div className="flex-1 flex items-center justify-center p-4">
-                    <div className="bg-slate-100 border border-slate-200 rounded-xl p-6 text-center max-w-sm">
-                        <p className="text-slate-600 mb-4">Gagal memuat daftar surat. Pastikan Anda terhubung ke internet.</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition"
-                        >
-                            Coba Lagi
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
+    // DEBUG: Log error ke console, tidak tampilkan UI error
+    if (error) {
+        console.log('HafalanView List Error:', error);
     }
 
     // Surah List View
