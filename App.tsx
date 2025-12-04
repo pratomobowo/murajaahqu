@@ -4,9 +4,19 @@ import { Navigation } from './components/Navigation';
 import { SurahList } from './components/SurahList';
 import { MurojaahView } from './components/MurojaahView';
 import { DalilView } from './components/DalilView';
+import { SplashScreen } from './components/SplashScreen';
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [activeTab, setActiveTab] = useState<'study' | 'quiz' | 'dalil'>('study');
+
+  if (showSplash) {
+    return (
+      <Layout>
+        <SplashScreen onStart={() => setShowSplash(false)} />
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
