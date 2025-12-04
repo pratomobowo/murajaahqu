@@ -22,8 +22,12 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
   );
   
   const [stats, setStats] = useState<Stats>(() => {
-    const saved = localStorage.getItem('murojaahStats');
-    return saved ? JSON.parse(saved) : { totalAnswered: 0, correct: 0, streak: 0, bestStreak: 0 };
+    try {
+      const saved = localStorage.getItem('murojaahStats');
+      return saved ? JSON.parse(saved) : { totalAnswered: 0, correct: 0, streak: 0, bestStreak: 0 };
+    } catch (e) {
+      return { totalAnswered: 0, correct: 0, streak: 0, bestStreak: 0 };
+    }
   });
 
   useEffect(() => {

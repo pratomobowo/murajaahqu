@@ -8,7 +8,7 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-md bg-white border-t border-slate-100 shadow-lg pb-safe">
+      <div className="mx-auto max-w-md bg-white border-t border-slate-100 shadow-lg pb-[env(safe-area-inset-bottom)]">
         <div className="grid grid-cols-3 h-16">
           <button
             onClick={() => onTabChange('study')}
