@@ -107,7 +107,7 @@ export const DalilView: React.FC = () => {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-slate-800 text-lg">{topic.title}</h3>
+              <h3 className="font-semibold text-slate-800 text-lg">{topic.title}</h3>
               <p className="text-sm text-slate-400 group-hover:text-slate-500 transition-colors line-clamp-1">
                 {topic.description}
               </p>

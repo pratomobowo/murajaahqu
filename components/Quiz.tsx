@@ -56,8 +56,8 @@ export const Quiz: React.FC<QuizProps> = ({ mode, onBack }) => {
     let questionText: React.ReactNode;
 
     const arabicName = (
-      <span className="font-arabic text-primary-600 mx-1 text-2xl inline-block" dir="rtl">
-        ({correctSurah.name})
+      <span className="mx-1 inline-block">
+        (<span className="font-arabic text-primary-600 text-2xl" dir="rtl">{correctSurah.name}</span>)
       </span>
     );
 

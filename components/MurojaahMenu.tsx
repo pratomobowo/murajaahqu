@@ -9,7 +9,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
   const menuItems = [
     {
       mode: 'RANDOM' as QuizMode,
-      title: 'Murojaah Random',
+      title: 'Murajaah Random',
       subtitle: 'Semua jenis pertanyaan acak',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
@@ -20,7 +20,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
     },
     {
       mode: QuizType.NUMBER,
-      title: 'Murojaah Nomor',
+      title: 'Murajaah Nomor',
       subtitle: 'Tebak urutan nomor surat',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
@@ -31,7 +31,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
     },
     {
       mode: QuizType.MEANING,
-      title: 'Murojaah Arti',
+      title: 'Murajaah Arti',
       subtitle: 'Tebak arti nama surat',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
@@ -42,7 +42,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
     },
     {
       mode: QuizType.AYAH_COUNT,
-      title: 'Murojaah Jumlah Ayat',
+      title: 'Murajaah Jumlah Ayat',
       subtitle: 'Tebak jumlah ayat',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
@@ -53,7 +53,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
     },
     {
       mode: QuizType.JUZ,
-      title: 'Murojaah Juz',
+      title: 'Murajaah Juz',
       subtitle: 'Tebak juz berapa',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
@@ -67,7 +67,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
   return (
     <div className="flex flex-col h-full bg-slate-50">
       <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
-        <h1 className="text-2xl font-bold text-white">Menu Murojaah</h1>
+        <h1 className="text-2xl font-bold text-white">Murajaah</h1>
         <p className="text-white/70 mt-1">Pilih kategori untuk memulai latihan hafalan.</p>
       </div>
 
@@ -82,7 +82,7 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
               {item.icon}
             </div>
             <div>
-              <h3 className="font-bold text-slate-800 text-lg">{item.title}</h3>
+              <h3 className="font-semibold text-slate-800 text-lg">{item.title}</h3>
               <p className="text-sm text-slate-400 group-hover:text-slate-500 transition-colors">{item.subtitle}</p>
             </div>
             <div className="ml-auto text-slate-300">

@@ -31,7 +31,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
                     Aplikasi Latihan Hafalan Al-Quran
                 </p>
                 <p className="text-white/60 text-center text-sm max-w-xs mb-10">
-                    Tingkatkan hafalan surat, nomor, arti, dan jumlah ayat dengan cara yang menyenangkan
+                    Tingkatkan hafalan surat, nomor, arti, dan jumlah ayat dengan cara digital
                 </p>
 
                 {/* Start Button */}
