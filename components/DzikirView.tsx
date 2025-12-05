@@ -87,7 +87,7 @@ const DzikirCard: React.FC<{ item: DzikirItem; index: number; colorClass: string
 
             {/* Collapsible Content */}
             <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
                     }`}
             >
                 <div className="px-4 pb-4 space-y-3">
@@ -99,9 +99,9 @@ const DzikirCard: React.FC<{ item: DzikirItem; index: number; colorClass: string
                         </p>
                     </div>
 
-                    {/* Faedah */}
+                    {/* Dalil */}
                     <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
-                        <p className="text-xs font-semibold text-emerald-600 mb-1">Faedah:</p>
+                        <p className="text-xs font-semibold text-emerald-600 mb-1">Dalil:</p>
                         <p className="text-sm text-emerald-800 leading-relaxed">
                             {item.faedah}
                         </p>
