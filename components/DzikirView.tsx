@@ -158,16 +158,6 @@ const DzikirDetailView: React.FC<{
                         colorClass={colorClass}
                     />
                 ))}
-
-                {/* Footer Note */}
-                <div className="text-center py-4">
-                    <p className="text-xs text-slate-400">
-                        Sumber: Rumaysho.com
-                    </p>
-                    <p className="text-xs text-slate-400">
-                        Buku Dzikir Pagi Petang - Ustadz Muhammad Abduh Tuasikal
-                    </p>
-                </div>
             </div>
         </div>
     );
