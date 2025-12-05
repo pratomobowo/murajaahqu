@@ -53,7 +53,8 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/fonts/amiri-400.woff2') format('woff2'); /* fallback to regular */
+  src: url('/fonts/amiri-400.woff2') format('woff2');
+  /* fallback to regular */
 }
 
 @tailwind base;
@@ -61,7 +62,8 @@
 @tailwind utilities;
 
 body {
-  background-color: #f8fafc; /* Slate 50 */
+  background-color: #f8fafc;
+  /* Slate 50 */
   font-family: 'Poppins', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
@@ -70,7 +72,25 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* PWA Install Prompt Animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out forwards;
 }

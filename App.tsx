@@ -6,6 +6,7 @@ import { MurojaahView } from './components/MurojaahView';
 import { DalilView } from './components/DalilView';
 import { InfoView } from './components/InfoView';
 import { SplashScreen } from './components/SplashScreen';
+import { InstallPrompt } from './components/InstallPrompt';
 
 type TabType = 'study' | 'quiz' | 'dalil' | 'info';
 
@@ -61,6 +62,7 @@ function App() {
         {activeTab === 'info' && <InfoView />}
       </main>
       <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
+      <InstallPrompt />
     </Layout>
   );
 }
