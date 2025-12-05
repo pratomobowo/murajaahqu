@@ -8,8 +8,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
-        arabic: ['"Amiri Quran"', 'Amiri', 'serif'],
+        sans: ['Poppins', 'system-ui', 'sans-serif'],
+        arabic: ['"KFGQPC Uthman Taha Naskh"', 'Amiri', 'Traditional Arabic', 'serif'],
       },
       colors: {
         primary: {
