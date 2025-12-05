@@ -4,11 +4,12 @@ import { Navigation } from './components/Navigation';
 import { SurahList } from './components/SurahList';
 import { MurojaahView } from './components/MurojaahView';
 import { DalilView } from './components/DalilView';
+import { DzikirView } from './components/DzikirView';
 import { InfoView } from './components/InfoView';
 import { SplashScreen } from './components/SplashScreen';
 import { InstallPrompt } from './components/InstallPrompt';
 
-type TabType = 'study' | 'quiz' | 'dalil' | 'info';
+type TabType = 'study' | 'quiz' | 'dzikir' | 'dalil' | 'info';
 
 // Splash screen akan muncul lagi setelah 24 jam tidak membuka aplikasi
 const SPLASH_EXPIRY_HOURS = 24;
@@ -29,7 +30,7 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     const saved = localStorage.getItem('murajaahqu_activeTab') as TabType | null;
-    return saved && ['study', 'quiz', 'dalil', 'info'].includes(saved) ? saved : 'study';
+    return saved && ['study', 'quiz', 'dzikir', 'dalil', 'info'].includes(saved) ? saved : 'study';
   });
 
   // Save timestamp when splash is dismissed
@@ -58,6 +59,7 @@ function App() {
       <main className="flex-1 overflow-hidden">
         {activeTab === 'study' && <SurahList />}
         {activeTab === 'quiz' && <MurojaahView />}
+        {activeTab === 'dzikir' && <DzikirView />}
         {activeTab === 'dalil' && <DalilView />}
         {activeTab === 'info' && <InfoView />}
       </main>
