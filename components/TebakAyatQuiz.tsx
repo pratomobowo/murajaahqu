@@ -44,13 +44,23 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
     }, [stats]);
 
     const generateQuestion = useCallback(() => {
-        // Pick random surah from Juz 30 data
-        const randomSurahIndex = Math.floor(Math.random() * QURAN_HAFALAN_DATA.length);
-        const correctSurah = QURAN_HAFALAN_DATA[randomSurahIndex];
+        // Pick random surah from Juz 30 data that has more than 1 verse
+        // (We need at least 2 verses to avoid picking the first verse)
+        let correctSurah: QuranSurah;
+        let attempts = 0;
+        const maxAttempts = 50;
 
-        // Pick random ayat from the surah
-        const randomAyatIndex = Math.floor(Math.random() * correctSurah.verses.length);
-        const ayatNumber = correctSurah.verses[randomAyatIndex].number;
+        do {
+            const randomSurahIndex = Math.floor(Math.random() * QURAN_HAFALAN_DATA.length);
+            correctSurah = QURAN_HAFALAN_DATA[randomSurahIndex];
+            attempts++;
+        } while (correctSurah.verses.length <= 1 && attempts < maxAttempts);
+
+        // Pick random ayat from the surah, but NEVER the first verse (ayat 1)
+        // because the first verse is too easy to identify
+        const versesWithoutFirst = correctSurah.verses.filter(v => v.number !== 1);
+        const randomAyatIndex = Math.floor(Math.random() * versesWithoutFirst.length);
+        const ayatNumber = versesWithoutFirst[randomAyatIndex].number;
 
         // Generate audio URL using Yasser Al-Dosari (qari code '06')
         const audioUrl = getAyatAudioUrl(correctSurah.number, ayatNumber, '06' as QariCode);
@@ -151,8 +161,8 @@ export const TebakAyatQuiz: React.FC<TebakAyatQuizProps> = ({ onBack }) => {
         audio.addEventListener('ended', () => {
             setIsPlaying(false);
             setHasPlayedOnce(true);
-            // Start timer after audio ends (only first play)
-            if (!isAnswered) {
+            // Start timer after audio ends (only on FIRST play - don't reset if already started)
+            if (!isAnswered && timeLeft === null) {
                 setTimeLeft(TIMER_SECONDS);
                 setIsTimerActive(true);
             }
