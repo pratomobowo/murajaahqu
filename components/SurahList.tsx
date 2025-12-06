@@ -371,6 +371,7 @@ export const SurahList: React.FC = () => {
           </div>
           {/* Filter Button */}
           <button
+            id="btn-juz-filter"
             onClick={() => setIsJuzModalOpen(true)}
             className="p-2 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
           >

@@ -7,6 +7,7 @@ import { DzikirView } from './components/DzikirView';
 import { InfoView } from './components/InfoView';
 import { SplashScreen } from './components/SplashScreen';
 import { InstallPrompt } from './components/InstallPrompt';
+import { OnboardingTutorial } from './components/OnboardingTutorial';
 
 type TabType = 'study' | 'quiz' | 'dzikir' | 'info';
 
@@ -63,6 +64,7 @@ function App() {
       </main>
       <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
       <InstallPrompt />
+      <OnboardingTutorial />
     </Layout>
   );
 }

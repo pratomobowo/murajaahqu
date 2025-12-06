@@ -99,10 +99,11 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
         {menuItems.map((item) => (
           <button
             key={item.title}
+            id={`menu-${String(item.mode).toLowerCase()}`}
             onClick={() => onSelectMode(item.mode)}
             className="w-full bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md hover:border-slate-200 transition-all active:scale-[0.98] group text-left"
           >
-            <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm ${item.color}`}>
+            <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center shadow-sm ${item.color}`}>
               {item.icon}
             </div>
             <div>

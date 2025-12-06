@@ -11,6 +11,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
       <div className="mx-auto max-w-md bg-gradient-to-r from-primary-600 to-primary-500 shadow-lg pb-[env(safe-area-inset-bottom)]">
         <div className="grid grid-cols-4 h-16">
           <button
+            id="nav-surat"
             onClick={() => onTabChange('study')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'study' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
@@ -23,6 +24,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
           </button>
 
           <button
+            id="nav-murajaah"
             onClick={() => onTabChange('quiz')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'quiz' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
@@ -34,6 +36,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
           </button>
 
           <button
+            id="nav-dzikir"
             onClick={() => onTabChange('dzikir')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'dzikir' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
@@ -47,6 +50,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
 
           <button
+            id="nav-info"
             onClick={() => onTabChange('info')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'info' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
