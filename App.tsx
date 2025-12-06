@@ -4,12 +4,13 @@ import { Navigation } from './components/Navigation';
 import { SurahList } from './components/SurahList';
 import { MurojaahView } from './components/MurojaahView';
 import { DzikirView } from './components/DzikirView';
+import { DoaView } from './components/DoaView';
 import { InfoView } from './components/InfoView';
 import { SplashScreen } from './components/SplashScreen';
 import { InstallPrompt } from './components/InstallPrompt';
 import { OnboardingTutorial } from './components/OnboardingTutorial';
 
-type TabType = 'study' | 'quiz' | 'dzikir' | 'info';
+type TabType = 'study' | 'quiz' | 'dzikir' | 'doa' | 'info';
 
 // Splash screen akan muncul lagi setelah 24 jam tidak membuka aplikasi
 const SPLASH_EXPIRY_HOURS = 24;
@@ -30,7 +31,7 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     const saved = localStorage.getItem('murajaahqu_activeTab') as TabType | null;
-    return saved && ['study', 'quiz', 'dzikir', 'info'].includes(saved) ? saved : 'study';
+    return saved && ['study', 'quiz', 'dzikir', 'doa', 'info'].includes(saved) ? saved : 'study';
   });
 
   // Save timestamp when splash is dismissed
@@ -60,6 +61,7 @@ function App() {
         {activeTab === 'study' && <SurahList />}
         {activeTab === 'quiz' && <MurojaahView />}
         {activeTab === 'dzikir' && <DzikirView />}
+        {activeTab === 'doa' && <DoaView />}
         {activeTab === 'info' && <InfoView />}
       </main>
       <Navigation activeTab={activeTab} onTabChange={handleTabChange} />

@@ -41,12 +41,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onStart }) => {
                 >
                     Mulai Murajaah
                 </button>
-
-                {/* Credits */}
-                <div className="text-center">
-                    <p className="text-white/50 text-xs">dibuat oleh</p>
-                    <p className="text-white/80 text-sm font-medium">Abu Asiyah</p>
-                </div>
             </div>
 
             {/* Animated Stars/Dots */}

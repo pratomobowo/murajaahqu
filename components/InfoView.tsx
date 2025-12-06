@@ -118,7 +118,7 @@ export const InfoView: React.FC = () => {
                             </svg>
                         </div>
                         <div>
-                            <h4 className="font-medium text-slate-800">Abu Asiyah</h4>
+                            <h4 className="font-medium text-slate-800">Abu Asfa</h4>
                             <p className="text-xs text-slate-500">Semoga Allah memudahkan kita dalam menjaga hafalan Al-Quran</p>
                         </div>
                     </div>
