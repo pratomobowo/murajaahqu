@@ -261,7 +261,7 @@ export const DoaView: React.FC = () => {
                     <HandsIcon className="w-7 h-7 text-white" />
                     <h1 className="text-2xl font-bold text-white">Doa</h1>
                 </div>
-                <p className="text-white/70 text-sm mb-4">Kumpulan doa dan dzikir harian</p>
+                <p className="text-white/70 text-sm mb-4">Kumpulan doa-doa harian</p>
 
                 {/* Search Bar */}
                 <div className="relative">
