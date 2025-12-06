@@ -1,8 +1,134 @@
 import React, { useState } from 'react';
 import { useSuratList, useSuratDetail, useAudio } from '../hooks/useQuran';
+import { JuzFilterModal } from './JuzFilterModal';
 
 // Qari tetap: Yasser Al-Dosari (kode '06')
 const QARI = '06' as const;
+
+// Complete mapping of surah numbers to all juz they contain
+// Many surahs span multiple juz, so this provides accurate filtering
+const SURAH_JUZ_MAPPING: Record<number, number[]> = {
+  1: [1],                    // Al-Fatihah
+  2: [1, 2, 3],              // Al-Baqarah - spans 3 juz
+  3: [3, 4],                 // Ali 'Imran
+  4: [4, 5, 6],              // An-Nisa'
+  5: [6, 7],                 // Al-Ma'idah
+  6: [7, 8],                 // Al-An'am
+  7: [8, 9],                 // Al-A'raf
+  8: [9, 10],                // Al-Anfal
+  9: [10, 11],               // At-Taubah
+  10: [11],                  // Yunus
+  11: [11, 12],              // Hud
+  12: [12, 13],              // Yusuf
+  13: [13],                  // Ar-Ra'd
+  14: [13],                  // Ibrahim
+  15: [14],                  // Al-Hijr
+  16: [14],                  // An-Nahl
+  17: [15],                  // Al-Isra'
+  18: [15, 16],              // Al-Kahf
+  19: [16],                  // Maryam
+  20: [16],                  // Taha
+  21: [17],                  // Al-Anbiya'
+  22: [17],                  // Al-Hajj
+  23: [18],                  // Al-Mu'minun
+  24: [18],                  // An-Nur
+  25: [18, 19],              // Al-Furqan
+  26: [19],                  // Asy-Syu'ara'
+  27: [19, 20],              // An-Naml
+  28: [20],                  // Al-Qasas
+  29: [20, 21],              // Al-Ankabut
+  30: [21],                  // Ar-Rum
+  31: [21],                  // Luqman
+  32: [21],                  // As-Sajdah
+  33: [21, 22],              // Al-Ahzab
+  34: [22],                  // Saba'
+  35: [22],                  // Fatir
+  36: [22, 23],              // Ya Sin
+  37: [23],                  // As-Saffat
+  38: [23],                  // Sad
+  39: [23, 24],              // Az-Zumar
+  40: [24],                  // Ghafir
+  41: [24, 25],              // Fussilat
+  42: [25],                  // Asy-Syura
+  43: [25],                  // Az-Zukhruf
+  44: [25],                  // Ad-Dukhan
+  45: [25],                  // Al-Jasiyah
+  46: [26],                  // Al-Ahqaf
+  47: [26],                  // Muhammad
+  48: [26],                  // Al-Fath
+  49: [26],                  // Al-Hujurat
+  50: [26],                  // Qaf
+  51: [26, 27],              // Az-Zariyat
+  52: [27],                  // At-Tur
+  53: [27],                  // An-Najm
+  54: [27],                  // Al-Qamar
+  55: [27],                  // Ar-Rahman
+  56: [27],                  // Al-Waqi'ah
+  57: [27],                  // Al-Hadid
+  58: [28],                  // Al-Mujadilah
+  59: [28],                  // Al-Hasyr
+  60: [28],                  // Al-Mumtahanah
+  61: [28],                  // As-Saff
+  62: [28],                  // Al-Jumu'ah
+  63: [28],                  // Al-Munafiqun
+  64: [28],                  // At-Tagabun
+  65: [28],                  // At-Talaq
+  66: [28],                  // At-Tahrim
+  67: [29],                  // Al-Mulk
+  68: [29],                  // Al-Qalam
+  69: [29],                  // Al-Haqqah
+  70: [29],                  // Al-Ma'arij
+  71: [29],                  // Nuh
+  72: [29],                  // Al-Jinn
+  73: [29],                  // Al-Muzzammil
+  74: [29],                  // Al-Muddassir
+  75: [29],                  // Al-Qiyamah
+  76: [29],                  // Al-Insan
+  77: [29],                  // Al-Mursalat
+  78: [30],                  // An-Naba'
+  79: [30],                  // An-Nazi'at
+  80: [30],                  // Abasa
+  81: [30],                  // At-Takwir
+  82: [30],                  // Al-Infitar
+  83: [30],                  // Al-Mutaffifin
+  84: [30],                  // Al-Insyiqaq
+  85: [30],                  // Al-Buruj
+  86: [30],                  // At-Tariq
+  87: [30],                  // Al-A'la
+  88: [30],                  // Al-Ghasyiyah
+  89: [30],                  // Al-Fajr
+  90: [30],                  // Al-Balad
+  91: [30],                  // Asy-Syams
+  92: [30],                  // Al-Lail
+  93: [30],                  // Ad-Duha
+  94: [30],                  // Asy-Syarh
+  95: [30],                  // At-Tin
+  96: [30],                  // Al-'Alaq
+  97: [30],                  // Al-Qadr
+  98: [30],                  // Al-Bayyinah
+  99: [30],                  // Az-Zalzalah
+  100: [30],                 // Al-'Adiyat
+  101: [30],                 // Al-Qari'ah
+  102: [30],                 // At-Takatsur
+  103: [30],                 // Al-'Asr
+  104: [30],                 // Al-Humazah
+  105: [30],                 // Al-Fil
+  106: [30],                 // Quraisy
+  107: [30],                 // Al-Ma'un
+  108: [30],                 // Al-Kautsar
+  109: [30],                 // Al-Kafirun
+  110: [30],                 // An-Nasr
+  111: [30],                 // Al-Lahab
+  112: [30],                 // Al-Ikhlas
+  113: [30],                 // Al-Falaq
+  114: [30],                 // An-Nas
+};
+
+// Helper: Check if surah is in a specific juz
+const isSurahInJuz = (surahNumber: number, juz: number): boolean => {
+  const juzList = SURAH_JUZ_MAPPING[surahNumber];
+  return juzList ? juzList.includes(juz) : false;
+};
 
 // ==================== SurahDetailView Component ====================
 const SurahDetailView: React.FC<{
@@ -185,14 +311,23 @@ const SurahDetailView: React.FC<{
 export const SurahList: React.FC = () => {
   const { suratList, loading, error } = useSuratList();
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedJuz, setSelectedJuz] = useState<number | null>(null);
+  const [isJuzModalOpen, setIsJuzModalOpen] = useState(false);
   const [selectedSuratNomor, setSelectedSuratNomor] = useState<number | null>(null);
 
-  // Filter surahs based on search
-  const filteredSurahs = suratList.filter(surat =>
-    surat.namaLatin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    surat.arti.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    surat.nomor.toString().includes(searchTerm)
-  );
+  // Filter surahs based on search AND Juz
+  const filteredSurahs = suratList.filter(surat => {
+    // Search filter
+    const matchesSearch =
+      surat.namaLatin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      surat.arti.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      surat.nomor.toString().includes(searchTerm);
+
+    // Juz filter - uses mapping that handles surahs spanning multiple juz
+    const matchesJuz = selectedJuz === null || isSurahInJuz(surat.nomor, selectedJuz);
+
+    return matchesSearch && matchesJuz;
+  });
 
   // Detail View
   if (selectedSuratNomor !== null) {
@@ -227,8 +362,23 @@ export const SurahList: React.FC = () => {
     <div className="flex flex-col h-full bg-slate-50">
       {/* Fixed Header */}
       <div className="flex-none bg-gradient-to-r from-primary-600 to-primary-500 z-20 px-6 py-4 shadow-sm">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Daftar Surat</h1>
-        <p className="text-white/70 text-sm mt-1">114 Surat • 30 Juz</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Daftar Surat</h1>
+            <p className="text-white/70 text-sm mt-1">
+              {selectedJuz === null ? '114 Surat • 30 Juz' : `Juz ${selectedJuz} • ${filteredSurahs.length} Surat`}
+            </p>
+          </div>
+          {/* Filter Button */}
+          <button
+            onClick={() => setIsJuzModalOpen(true)}
+            className="p-2 rounded-full hover:bg-white/20 text-white/80 hover:text-white transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+            </svg>
+          </button>
+        </div>
 
         <div className="mt-4 relative">
           <input
@@ -243,6 +393,14 @@ export const SurahList: React.FC = () => {
           </svg>
         </div>
       </div>
+
+      {/* Juz Filter Modal */}
+      <JuzFilterModal
+        isOpen={isJuzModalOpen}
+        onClose={() => setIsJuzModalOpen(false)}
+        currentSelectedJuz={selectedJuz}
+        onSave={setSelectedJuz}
+      />
 
       {/* Scrollable List Content */}
       <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-3">
