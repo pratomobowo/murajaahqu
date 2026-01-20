@@ -39,7 +39,7 @@
   src: url('/fonts/poppins-700.woff2') format('woff2');
 }
 
-/* Amiri Arabic Font */
+/* Amiri Arabic Font - Regular */
 @font-face {
   font-family: 'Amiri';
   font-style: normal;
@@ -48,13 +48,22 @@
   src: url('/fonts/amiri-400.woff2') format('woff2');
 }
 
+/* Amiri Arabic Font - Quran specific (more legible for vowels) */
 @font-face {
-  font-family: 'Amiri';
+  font-family: 'Amiri Quran';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   font-display: swap;
-  src: url('/fonts/amiri-400.woff2') format('woff2');
-  /* fallback to regular */
+  src: url('/fonts/amiri-quran.woff2') format('woff2');
+}
+
+/* KFGQPC Uthman Taha Naskh - High quality Quran font */
+@font-face {
+  font-family: 'Uthman Taha';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/KFGQPC Uthman Taha Naskh Regular.ttf') format('truetype');
 }
 
 @tailwind base;
@@ -66,6 +75,12 @@ body {
   /* Slate 50 */
   font-family: 'Poppins', sans-serif;
   -webkit-tap-highlight-color: transparent;
+}
+
+.font-arabic {
+  line-height: 2.2;
+  word-spacing: 0.1em;
+  font-feature-settings: "cv01", "cv02", "cv03", "cv04";
 }
 
 /* Hide scrollbar for clean mobile look but allow scroll */

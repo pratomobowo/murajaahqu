@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MurojaahMenu } from './MurojaahMenu';
 import { Quiz } from './Quiz';
 import { HafalanView } from './HafalanView';
 import { TebakAyatQuiz } from './TebakAyatQuiz';
 import { QuizMode } from '../types';
 
-type ViewMode = QuizMode | 'HAFALAN' | 'TEBAK_AYAT' | null;
-
 export const MurojaahView: React.FC = () => {
-  const [selectedMode, setSelectedMode] = useState<ViewMode>(null);
+  const navigate = useNavigate();
+  const { mode } = useParams();
+  const selectedMode = mode ? mode.toUpperCase() : null;
 
   if (selectedMode === 'HAFALAN') {
-    return <HafalanView onBack={() => setSelectedMode(null)} />;
+    return <HafalanView onBack={() => navigate('/quiz')} />;
   }
 
   if (selectedMode === 'TEBAK_AYAT') {
-    return <TebakAyatQuiz onBack={() => setSelectedMode(null)} />;
+    return <TebakAyatQuiz onBack={() => navigate('/quiz')} />;
   }
 
   if (selectedMode) {
-    return <Quiz mode={selectedMode as QuizMode} onBack={() => setSelectedMode(null)} />;
+    return <Quiz mode={selectedMode as QuizMode} onBack={() => navigate('/quiz')} />;
   }
 
-  return <MurojaahMenu onSelectMode={setSelectedMode} />;
+  return <MurojaahMenu onSelectMode={(m) => navigate(`/quiz/${m.toLowerCase()}`)} />;
 };

@@ -9,7 +9,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'system-ui', 'sans-serif'],
-        arabic: ['"KFGQPC Uthman Taha Naskh"', 'Amiri', 'Traditional Arabic', 'serif'],
+        arabic: ['"Uthman Taha"', '"Amiri Quran"', 'Amiri', 'serif'],
       },
       colors: {
         primary: {

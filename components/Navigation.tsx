@@ -1,18 +1,31 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface NavigationProps {
   activeTab: 'study' | 'quiz' | 'dzikir' | 'doa' | 'info';
-  onTabChange: (tab: 'study' | 'quiz' | 'dzikir' | 'doa' | 'info') => void;
+  onTabChange?: (tab: 'study' | 'quiz' | 'dzikir' | 'doa' | 'info') => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
+  const navigate = useNavigate();
+
+  const handleTabClick = (tab: 'study' | 'quiz' | 'dzikir' | 'doa' | 'info') => {
+    // Save last visit time on tab change (matches old transition logic)
+    localStorage.setItem('murajaahqu_lastVisit', Date.now().toString());
+
+    // Switch route
+    navigate(`/${tab}`);
+
+    // Call optional callback if provided
+    if (onTabChange) onTabChange(tab);
+  };
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-md bg-gradient-to-r from-primary-600 to-primary-500 shadow-lg pb-[env(safe-area-inset-bottom)]">
         <div className="grid grid-cols-5 h-16">
           <button
             id="nav-surat"
-            onClick={() => onTabChange('study')}
+            onClick={() => handleTabClick('study')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'study' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
           >
@@ -25,7 +38,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
           <button
             id="nav-murajaah"
-            onClick={() => onTabChange('quiz')}
+            onClick={() => handleTabClick('quiz')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'quiz' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
           >
@@ -37,7 +50,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
           <button
             id="nav-dzikir"
-            onClick={() => onTabChange('dzikir')}
+            onClick={() => handleTabClick('dzikir')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'dzikir' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
           >
@@ -50,7 +63,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
           <button
             id="nav-doa"
-            onClick={() => onTabChange('doa')}
+            onClick={() => handleTabClick('doa')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'doa' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
           >
@@ -63,7 +76,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
           <button
             id="nav-info"
-            onClick={() => onTabChange('info')}
+            onClick={() => handleTabClick('info')}
             className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'info' ? 'text-white' : 'text-white/60 hover:text-white/80'
               }`}
           >

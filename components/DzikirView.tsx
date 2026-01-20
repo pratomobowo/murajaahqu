@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DZIKIR_PAGI, DZIKIR_PETANG, DzikirData, DzikirItem } from '../dzikirData';
 
 // Sun Icon for Pagi
@@ -165,13 +166,16 @@ const DzikirDetailView: React.FC<{
 
 // Main Menu View
 export const DzikirView: React.FC = () => {
-    const [selectedDzikir, setSelectedDzikir] = useState<DzikirData | null>(null);
+    const navigate = useNavigate();
+    const { type } = useParams();
+
+    const selectedDzikir = type === 'pagi' ? DZIKIR_PAGI : type === 'petang' ? DZIKIR_PETANG : null;
 
     if (selectedDzikir) {
         return (
             <DzikirDetailView
                 data={selectedDzikir}
-                onBack={() => setSelectedDzikir(null)}
+                onBack={() => navigate('/dzikir')}
             />
         );
     }
@@ -188,7 +192,7 @@ export const DzikirView: React.FC = () => {
             <div className="flex-1 overflow-y-auto px-6 py-6 pb-24 space-y-4">
                 {/* Dzikir Pagi Card */}
                 <button
-                    onClick={() => setSelectedDzikir(DZIKIR_PAGI)}
+                    onClick={() => navigate('/dzikir/pagi')}
                     className="w-full bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 shadow-sm border border-amber-100 flex items-center gap-4 hover:shadow-md hover:border-amber-200 transition-all active:scale-[0.98] group text-left"
                 >
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-orange-200">
@@ -210,7 +214,7 @@ export const DzikirView: React.FC = () => {
 
                 {/* Dzikir Petang Card */}
                 <button
-                    onClick={() => setSelectedDzikir(DZIKIR_PETANG)}
+                    onClick={() => navigate('/dzikir/petang')}
                     className="w-full bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-5 shadow-sm border border-indigo-100 flex items-center gap-4 hover:shadow-md hover:border-indigo-200 transition-all active:scale-[0.98] group text-left"
                 >
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200">

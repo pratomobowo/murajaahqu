@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSuratList, useSuratDetail, useAudio } from '../hooks/useQuran';
 import { JuzFilterModal } from './JuzFilterModal';
 
@@ -252,13 +253,13 @@ const SurahDetailView: React.FC<{
           {surat.ayat.map((ayat) => (
             <div
               key={ayat.nomorAyat}
-              className="w-full text-right bg-white rounded-2xl p-4 shadow-sm border border-slate-100"
+              className="w-full text-right bg-white rounded-2xl p-4 py-6 shadow-sm border border-slate-100"
               dir="rtl"
             >
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   {/* Arabic Text */}
-                  <p className="font-arabic text-2xl leading-loose text-slate-800">
+                  <p className="font-arabic text-2xl leading-[3] text-slate-800">
                     {ayat.teksArab}
                   </p>
 
@@ -309,11 +310,14 @@ const SurahDetailView: React.FC<{
 
 // ==================== Main SurahList Component ====================
 export const SurahList: React.FC = () => {
+  const navigate = useNavigate();
+  const { nomor } = useParams();
+  const selectedSuratNomor = nomor ? parseInt(nomor, 10) : null;
+
   const { suratList, loading, error } = useSuratList();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJuz, setSelectedJuz] = useState<number | null>(null);
   const [isJuzModalOpen, setIsJuzModalOpen] = useState(false);
-  const [selectedSuratNomor, setSelectedSuratNomor] = useState<number | null>(null);
 
   // Filter surahs based on search AND Juz
   const filteredSurahs = suratList.filter(surat => {
@@ -331,7 +335,7 @@ export const SurahList: React.FC = () => {
 
   // Detail View
   if (selectedSuratNomor !== null) {
-    return <SurahDetailView suratNomor={selectedSuratNomor} onBack={() => setSelectedSuratNomor(null)} />;
+    return <SurahDetailView suratNomor={selectedSuratNomor} onBack={() => navigate('/study')} />;
   }
 
   // Loading state - juga tampilkan loading jika data masih kosong dan tidak ada error
@@ -408,7 +412,7 @@ export const SurahList: React.FC = () => {
         {filteredSurahs.map((surat) => (
           <button
             key={surat.nomor}
-            onClick={() => setSelectedSuratNomor(surat.nomor)}
+            onClick={() => navigate(`/study/${surat.nomor}`)}
             className="w-full text-left group bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200"
           >
             <div className="flex items-center justify-between">

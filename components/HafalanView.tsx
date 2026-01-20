@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSuratList, useSuratDetail } from '../hooks/useQuran';
 import { JuzFilterModal } from './JuzFilterModal';
 
@@ -213,8 +214,11 @@ const SurahDetailView: React.FC<{
 
 // ==================== Main HafalanView Component ====================
 export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const selectedSuratNomor = id ? parseInt(id, 10) : null;
+
     const { suratList, loading, error } = useSuratList();
-    const [selectedSuratNomor, setSelectedSuratNomor] = useState<number | null>(null);
     const [selectedJuz, setSelectedJuz] = useState<number | null>(null);
     const [isJuzModalOpen, setIsJuzModalOpen] = useState(false);
 
@@ -223,20 +227,12 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
         return selectedJuz === null || isSurahInJuz(surat.nomor, selectedJuz);
     });
 
-    const handleSelectSurah = (nomor: number) => {
-        setSelectedSuratNomor(nomor);
-    };
-
-    const handleBackToList = () => {
-        setSelectedSuratNomor(null);
-    };
-
     // Surah Detail View
     if (selectedSuratNomor !== null) {
         return (
             <SurahDetailView
                 suratNomor={selectedSuratNomor}
-                onBack={handleBackToList}
+                onBack={() => navigate('/quiz/hafalan')}
             />
         );
     }
@@ -321,7 +317,7 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
                 {filteredSurahs.map((surat) => (
                     <button
                         key={surat.nomor}
-                        onClick={() => handleSelectSurah(surat.nomor)}
+                        onClick={() => navigate(`/quiz/hafalan/${surat.nomor}`)}
                         className="w-full text-left group bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200"
                     >
                         <div className="flex items-center justify-between">

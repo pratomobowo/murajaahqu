@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Doa, fetchAllDoa, searchDoa } from '../services/doaService';
 
 // Search Icon
@@ -215,11 +216,18 @@ const DoaListItem: React.FC<{
 
 // Main DoaView Component
 export const DoaView: React.FC = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+
     const [allDoa, setAllDoa] = useState<Doa[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedDoa, setSelectedDoa] = useState<Doa | null>(null);
+
+    const selectedDoa = useMemo(() => {
+        if (!id || allDoa.length === 0) return null;
+        return allDoa.find(doa => doa.id.toString() === id) || null;
+    }, [id, allDoa]);
 
     const loadDoa = async () => {
         setLoading(true);
@@ -248,7 +256,7 @@ export const DoaView: React.FC = () => {
         return (
             <DoaDetailView
                 doa={selectedDoa}
-                onBack={() => setSelectedDoa(null)}
+                onBack={() => navigate('/doa')}
             />
         );
     }
@@ -324,7 +332,7 @@ export const DoaView: React.FC = () => {
                                     <DoaListItem
                                         key={doa.id}
                                         doa={doa}
-                                        onClick={() => setSelectedDoa(doa)}
+                                        onClick={() => navigate(`/doa/${doa.id}`)}
                                     />
                                 ))}
                             </div>
