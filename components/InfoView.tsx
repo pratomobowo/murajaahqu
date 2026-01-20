@@ -24,7 +24,7 @@ export const InfoView: React.FC = () => {
                         </div>
                         <div>
                             <h2 className="text-xl font-bold text-slate-800">MurajaahQu</h2>
-                            <p className="text-sm text-slate-500">Versi 1.0.0</p>
+                            <p className="text-sm text-slate-500">Versi 1.2.0</p>
                         </div>
                     </div>
 
