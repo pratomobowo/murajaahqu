@@ -37,31 +37,22 @@ export const DzikirDoaView: React.FC = () => {
             title: 'Dzikir Pagi',
             subtitle: 'Setelah Shubuh hingga Syuruq',
             path: '/dzikir/pagi',
-            icon: <SunIcon className="w-9 h-9 text-white" />,
-            color: 'from-amber-400 to-orange-500',
-            bgColor: 'from-amber-50 to-orange-50',
-            borderColor: 'border-amber-100',
-            iconShadow: 'shadow-orange-200'
+            icon: <SunIcon className="w-9 h-9 text-amber-600" />,
+            iconBg: 'bg-amber-100',
         },
         {
             title: 'Dzikir Petang',
             subtitle: 'Setelah Ashar hingga Maghrib',
             path: '/dzikir/petang',
-            icon: <MoonIcon className="w-9 h-9 text-white" />,
-            color: 'from-indigo-500 to-purple-600',
-            bgColor: 'from-indigo-50 to-purple-50',
-            borderColor: 'border-indigo-100',
-            iconShadow: 'shadow-purple-200'
+            icon: <MoonIcon className="w-9 h-9 text-indigo-600" />,
+            iconBg: 'bg-indigo-100',
         },
         {
             title: 'Doa Harian',
             subtitle: 'Kumpulan doa sahih harian',
             path: '/doa',
-            icon: <HandsIcon className="w-9 h-9 text-white" />,
-            color: 'from-teal-500 to-emerald-600',
-            bgColor: 'from-teal-50 to-emerald-50',
-            borderColor: 'border-teal-100',
-            iconShadow: 'shadow-emerald-200'
+            icon: <HandsIcon className="w-9 h-9 text-teal-600" />,
+            iconBg: 'bg-teal-100',
         }
     ];
 
@@ -79,9 +70,9 @@ export const DzikirDoaView: React.FC = () => {
                     <button
                         key={item.title}
                         onClick={() => navigate(item.path)}
-                        className={`w-full bg-gradient-to-br ${item.bgColor} rounded-2xl p-5 shadow-sm border ${item.borderColor} flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group text-left`}
+                        className="w-full bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group text-left"
                     >
-                        <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg ${item.iconShadow}`}>
+                        <div className={`w-16 h-16 rounded-2xl ${item.iconBg} flex items-center justify-center`}>
                             {item.icon}
                         </div>
                         <div className="flex-1">
