@@ -28,6 +28,10 @@
     ],
     "rewrites": [
         {
+            "source": "/api-sholat/:path*",
+            "destination": "https://use.api.co.id/:path*"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
