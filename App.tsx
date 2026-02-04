@@ -9,6 +9,10 @@ import { InfoView } from './components/InfoView';
 import { SplashScreen } from './components/SplashScreen';
 import { InstallPrompt } from './components/InstallPrompt';
 import { OnboardingTutorial } from './components/OnboardingTutorial';
+import { BookmarksView } from './components/BookmarksView';
+import { DzikirDoaView } from './components/DzikirDoaView';
+import { PrayerTimeView } from './components/PrayerTimeView';
+import { BookmarkProvider } from './context/BookmarkContext';
 
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
@@ -48,34 +52,39 @@ function App() {
   // Determine active tab for Navigation based on path
   const getActiveTab = () => {
     const path = location.pathname;
-    if (path.startsWith('/study')) return 'study';
-    if (path.startsWith('/quiz')) return 'quiz';
-    if (path.startsWith('/dzikir')) return 'dzikir';
-    if (path.startsWith('/doa')) return 'doa';
+    if (path.startsWith('/surat')) return 'study';
+    if (path.startsWith('/sholat')) return 'sholat';
+    if (path.startsWith('/murajaah')) return 'quiz';
+    if (path.startsWith('/dzikir') || path.startsWith('/doa') || path.startsWith('/dzikir-doa')) return 'dzikirdoa';
     if (path.startsWith('/info')) return 'info';
     return 'study';
   };
 
   return (
     <Layout>
-      <main className="flex-1 overflow-hidden">
-        <Routes>
-          <Route path="/study" element={<SurahList />} />
-          <Route path="/study/:nomor" element={<SurahList />} />
-          <Route path="/quiz" element={<MurojaahView />} />
-          <Route path="/quiz/:mode" element={<MurojaahView />} />
-          <Route path="/quiz/:mode/:id" element={<MurojaahView />} />
-          <Route path="/dzikir" element={<DzikirView />} />
-          <Route path="/dzikir/:type" element={<DzikirView />} />
-          <Route path="/doa" element={<DoaView />} />
-          <Route path="/doa/:id" element={<DoaView />} />
-          <Route path="/info" element={<InfoView />} />
-          <Route path="/" element={<Navigate to="/study" replace />} />
-        </Routes>
-      </main>
-      <Navigation activeTab={getActiveTab()} />
-      <InstallPrompt />
-      <OnboardingTutorial />
+      <BookmarkProvider>
+        <main className="flex-1 overflow-hidden">
+          <Routes>
+            <Route path="/surat" element={<SurahList />} />
+            <Route path="/surat/:nomor" element={<SurahList />} />
+            <Route path="/sholat" element={<PrayerTimeView />} />
+            <Route path="/murajaah" element={<MurojaahView />} />
+            <Route path="/murajaah/:mode" element={<MurojaahView />} />
+            <Route path="/murajaah/:mode/:id" element={<MurojaahView />} />
+            <Route path="/dzikir-doa" element={<DzikirDoaView />} />
+            <Route path="/dzikir" element={<DzikirView />} />
+            <Route path="/dzikir/:type" element={<DzikirView />} />
+            <Route path="/doa" element={<DoaView />} />
+            <Route path="/doa/:id" element={<DoaView />} />
+            <Route path="/bacaan-terakhir" element={<BookmarksView />} />
+            <Route path="/info" element={<InfoView />} />
+            <Route path="/" element={<Navigate to="/surat" replace />} />
+          </Routes>
+        </main>
+        <Navigation activeTab={getActiveTab()} />
+        <InstallPrompt />
+        <OnboardingTutorial />
+      </BookmarkProvider>
     </Layout>
   );
 }

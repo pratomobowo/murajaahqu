@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useOnlineVisitors } from '../hooks/useOnlineVisitors';
 
 export const InfoView: React.FC = () => {
+    const navigate = useNavigate();
     const visitorCount = useOnlineVisitors();
 
     return (
@@ -65,6 +67,29 @@ export const InfoView: React.FC = () => {
                             <div className="text-slate-400 text-xs">Real-time</div>
                             <div className="text-slate-500 text-xs mt-1">Update otomatis</div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Bookmark Shortcut Card */}
+                <div
+                    onClick={() => navigate('/bacaan-terakhir')}
+                    className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6 cursor-pointer active:scale-[0.98] transition-all group flex items-center justify-between"
+                >
+                    <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-slate-800 font-bold text-lg">Bacaan Terakhir</h3>
+                            <p className="text-slate-400 text-xs">Lanjutkan bacaan terakhir Anda</p>
+                        </div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors text-slate-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
                     </div>
                 </div>
 

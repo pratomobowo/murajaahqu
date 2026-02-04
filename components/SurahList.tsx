@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSuratList, useSuratDetail, useAudio } from '../hooks/useQuran';
+import { useBookmarks } from '../hooks/useBookmarks';
 import { JuzFilterModal } from './JuzFilterModal';
 
 // Qari tetap: Yasser Al-Dosari (kode '06')
@@ -139,6 +140,33 @@ const SurahDetailView: React.FC<{
   const { surat, loading, error } = useSuratDetail(suratNomor);
   const [showTranslation, setShowTranslation] = useState(false);
   const { toggle, isPlaying, currentUrl, loading: audioLoading } = useAudio();
+  const { toggleBookmark, isBookmarked } = useBookmarks();
+  const location = useLocation();
+
+  // Auto-scroll to specific ayat if provided in location state
+  useEffect(() => {
+    if (surat && location.state?.targetAyat) {
+      const targetAyat = location.state.targetAyat;
+      // Small timeout to ensure DOM is rendered
+      const timer = setTimeout(() => {
+        const element = document.getElementById(`ayat-${targetAyat}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [surat, location.state]);
+
+  const handleBookmark = (ayat: any) => {
+    toggleBookmark({
+      id: `${suratNomor}-${ayat.nomorAyat}`,
+      surahNo: suratNomor,
+      surahName: surat?.namaLatin || '',
+      ayatNo: ayat.nomorAyat,
+      arabicText: ayat.teksArab
+    });
+  };
 
   // Loading state
   if (loading) {
@@ -197,6 +225,9 @@ const SurahDetailView: React.FC<{
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
           </button>
+          <div className="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+            {surat.nomor}
+          </div>
           <div className="flex-1">
             <h2 className="font-bold text-white text-lg">{surat.namaLatin}</h2>
             <p className="text-xs text-white/70">{surat.arti} • {surat.jumlahAyat} Ayat • {surat.tempatTurun}</p>
@@ -249,54 +280,68 @@ const SurahDetailView: React.FC<{
         )}
 
         {/* Ayat */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           {surat.ayat.map((ayat) => (
             <div
               key={ayat.nomorAyat}
-              className="w-full text-right bg-white rounded-2xl p-4 py-6 shadow-sm border border-slate-100"
-              dir="rtl"
+              id={`ayat-${ayat.nomorAyat}`}
+              className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden"
             >
-              <div className="flex items-start gap-3">
-                <div className="flex-1">
-                  {/* Arabic Text */}
-                  <p className="font-arabic text-2xl leading-[3] text-slate-800">
-                    {ayat.teksArab}
-                  </p>
-
-                  {/* Translation - Only shown when toggled */}
-                  {showTranslation && (
-                    <div className="mt-3 pt-3 border-t border-slate-100" dir="ltr">
-                      <p className="text-sm text-slate-600 text-left">{ayat.teksIndonesia}</p>
-                    </div>
-                  )}
+              {/* Controls Header (Horizontal) */}
+              <div className="flex items-center justify-between px-4 py-3 bg-slate-50/50 border-b border-slate-100/50" dir="ltr">
+                <div className="w-8 h-8 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center text-primary-600 font-bold text-xs ring-4 ring-primary-50/50">
+                  {ayat.nomorAyat}
                 </div>
 
-                {/* Play Icon & Verse Number */}
-                <div className="flex flex-col items-center gap-1" dir="ltr">
+                <div className="flex items-center gap-3">
+                  {/* Bookmark Button */}
+                  <button
+                    onClick={() => handleBookmark(ayat)}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow-sm ${isBookmarked(`${suratNomor}-${ayat.nomorAyat}`)
+                      ? 'bg-emerald-100 text-emerald-600'
+                      : 'bg-white text-slate-400 hover:bg-slate-100'
+                      }`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill={isBookmarked(`${suratNomor}-${ayat.nomorAyat}`) ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                    </svg>
+                  </button>
+
                   {/* Play Button */}
                   <button
                     onClick={() => toggle(ayat.audio[QARI])}
                     disabled={audioLoading}
-                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${isPlaying && currentUrl === ayat.audio[QARI]
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shadow-sm ${isPlaying && currentUrl === ayat.audio[QARI]
                       ? 'bg-primary-500 text-white'
-                      : 'bg-primary-100 text-primary-600 hover:bg-primary-200'
+                      : 'bg-white text-primary-600 hover:bg-primary-50'
                       }`}
                   >
                     {isPlaying && currentUrl === ayat.audio[QARI] ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
                       </svg>
                     ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
                       </svg>
                     )}
                   </button>
-                  {/* Verse Number */}
-                  <span className="text-xs text-primary-600 font-semibold">
-                    {ayat.nomorAyat}
-                  </span>
                 </div>
+              </div>
+
+              {/* Text Area */}
+              <div className="p-4 pt-6" dir="rtl">
+                {/* Arabic Text */}
+                <p className="font-arabic text-2xl leading-[2.5] text-slate-800 text-right">
+                  {ayat.teksArab}
+                </p>
+
+                {/* Translation - Only shown when toggled */}
+                {showTranslation && (
+                  <div className="mt-4 pt-4 border-t border-slate-50" dir="ltr">
+                    <p className="text-sm text-slate-600 text-left italic leading-relaxed">{ayat.teksIndonesia}</p>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -312,6 +357,7 @@ const SurahDetailView: React.FC<{
 export const SurahList: React.FC = () => {
   const navigate = useNavigate();
   const { nomor } = useParams();
+  const { lastRead } = useBookmarks();
   const selectedSuratNomor = nomor ? parseInt(nomor, 10) : null;
 
   const { suratList, loading, error } = useSuratList();
@@ -335,7 +381,7 @@ export const SurahList: React.FC = () => {
 
   // Detail View
   if (selectedSuratNomor !== null) {
-    return <SurahDetailView suratNomor={selectedSuratNomor} onBack={() => navigate('/study')} />;
+    return <SurahDetailView suratNomor={selectedSuratNomor} onBack={() => navigate('/surat')} />;
   }
 
   // Loading state - juga tampilkan loading jika data masih kosong dan tidak ada error
@@ -408,11 +454,38 @@ export const SurahList: React.FC = () => {
       />
 
       {/* Scrollable List Content */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-3">
+      <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 space-y-4">
+        {lastRead && (
+          <div
+            onClick={() => navigate(`/surat/${lastRead.surahNo}`, { state: { targetAyat: lastRead.ayatNo } })}
+            className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm cursor-pointer active:scale-[0.98] transition-all group overflow-hidden relative"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+            <div className="flex justify-between items-center relative z-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-primary-900 font-bold">Terakhir Dibaca</h3>
+                  <p className="text-primary-700 text-sm">{lastRead.surahName} • Ayat {lastRead.ayatNo}</p>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-primary-500/10 flex items-center justify-center text-primary-600 group-hover:bg-primary-500 group-hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
+
         {filteredSurahs.map((surat) => (
           <button
             key={surat.nomor}
-            onClick={() => navigate(`/study/${surat.nomor}`)}
+            onClick={() => navigate(`/surat/${surat.nomor}`)}
             className="w-full text-left group bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200"
           >
             <div className="flex items-center justify-between">

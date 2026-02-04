@@ -175,7 +175,7 @@ export const DzikirView: React.FC = () => {
         return (
             <DzikirDetailView
                 data={selectedDzikir}
-                onBack={() => navigate('/dzikir')}
+                onBack={() => navigate('/dzikir-doa')}
             />
         );
     }

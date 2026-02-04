@@ -12,16 +12,16 @@ export const MurojaahView: React.FC = () => {
   const selectedMode = mode ? mode.toUpperCase() : null;
 
   if (selectedMode === 'HAFALAN') {
-    return <HafalanView onBack={() => navigate('/quiz')} />;
+    return <HafalanView onBack={() => navigate('/murajaah')} />;
   }
 
   if (selectedMode === 'TEBAK_AYAT') {
-    return <TebakAyatQuiz onBack={() => navigate('/quiz')} />;
+    return <TebakAyatQuiz onBack={() => navigate('/murajaah')} />;
   }
 
   if (selectedMode) {
-    return <Quiz mode={selectedMode as QuizMode} onBack={() => navigate('/quiz')} />;
+    return <Quiz mode={selectedMode as QuizMode} onBack={() => navigate('/murajaah')} />;
   }
 
-  return <MurojaahMenu onSelectMode={(m) => navigate(`/quiz/${m.toLowerCase()}`)} />;
+  return <MurojaahMenu onSelectMode={(m) => navigate(`/murajaah/${m.toLowerCase()}`)} />;
 };

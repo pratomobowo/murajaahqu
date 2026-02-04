@@ -256,7 +256,7 @@ export const DoaView: React.FC = () => {
         return (
             <DoaDetailView
                 doa={selectedDoa}
-                onBack={() => navigate('/doa')}
+                onBack={() => navigate('/dzikir-doa')}
             />
         );
     }

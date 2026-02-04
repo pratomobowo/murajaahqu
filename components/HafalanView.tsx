@@ -232,7 +232,7 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
         return (
             <SurahDetailView
                 suratNomor={selectedSuratNomor}
-                onBack={() => navigate('/quiz/hafalan')}
+                onBack={() => navigate('/murajaah/hafalan')}
             />
         );
     }
@@ -317,7 +317,7 @@ export const HafalanView: React.FC<HafalanViewProps> = ({ onBack }) => {
                 {filteredSurahs.map((surat) => (
                     <button
                         key={surat.nomor}
-                        onClick={() => navigate(`/quiz/hafalan/${surat.nomor}`)}
+                        onClick={() => navigate(`/murajaah/hafalan/${surat.nomor}`)}
                         className="w-full text-left group bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-200"
                     >
                         <div className="flex items-center justify-between">
