@@ -78,6 +78,14 @@ function App() {
             <Route path="/doa/:id" element={<DoaView />} />
             <Route path="/bacaan-terakhir" element={<BookmarksView />} />
             <Route path="/info" element={<InfoView />} />
+
+            {/* Legacy Redirects */}
+            <Route path="/study" element={<Navigate to="/surat" replace />} />
+            <Route path="/study/:nomor" element={<Navigate to="/surat" replace />} />
+            <Route path="/quiz" element={<Navigate to="/murajaah" replace />} />
+            <Route path="/quiz/:mode" element={<Navigate to="/murajaah" replace />} />
+            <Route path="/bookmarks" element={<Navigate to="/bacaan-terakhir" replace />} />
+
             <Route path="/" element={<Navigate to="/surat" replace />} />
           </Routes>
         </main>
