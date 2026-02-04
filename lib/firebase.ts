@@ -5,6 +5,7 @@ import { getDatabase } from "firebase/database";
 const firebaseConfig = {
     apiKey: "AIzaSyDMdT4w-la2gBROQcgY_kZlpYbkB-15jYQ",
     authDomain: "muroku-id.firebaseapp.com",
+    databaseURL: "https://muroku-id-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "muroku-id",
     storageBucket: "muroku-id.firebasestorage.app",
     messagingSenderId: "92824975959",

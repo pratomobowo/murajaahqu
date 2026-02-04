@@ -78,4 +78,13 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    proxy: {
+      '/api-sholat': {
+        target: 'https://use.api.co.id',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-sholat/, ''),
+      },
+    },
+  },
 })

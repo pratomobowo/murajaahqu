@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Regency, PrayerSchedule, fetchRegencies, fetchDailyPrayerTime } from '../services/prayerTimeService';
 
+const ClockIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
 const STORAGE_KEY_REGENCY = 'murajaahqu_regency';
 
 export const PrayerTimeView: React.FC = () => {
@@ -23,12 +30,27 @@ export const PrayerTimeView: React.FC = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // Load regencies for selection
+    const [isRegenciesLoading, setIsRegenciesLoading] = useState(false);
+    const [regencyError, setRegencyError] = useState<string | null>(null);
+
+    // Load regencies for selection (also load when no regency is saved for new users)
     useEffect(() => {
-        if (isSelectingCity && regencies.length === 0) {
-            fetchRegencies().then(setRegencies);
+        const shouldLoad = (isSelectingCity || !regency) && regencies.length === 0 && !isRegenciesLoading;
+        if (shouldLoad) {
+            setIsRegenciesLoading(true);
+            setRegencyError(null);
+            fetchRegencies()
+                .then(data => {
+                    if (data && data.length > 0) {
+                        setRegencies(data);
+                    } else {
+                        setRegencyError('Gagal memuat daftar wilayah.');
+                    }
+                })
+                .catch(() => setRegencyError('Terjadi kesalahan saat memuat wilayah.'))
+                .finally(() => setIsRegenciesLoading(false));
         }
-    }, [isSelectingCity, regencies.length]);
+    }, [isSelectingCity, regencies.length, isRegenciesLoading]);
 
     // Load schedule when regency changes
     useEffect(() => {
@@ -114,8 +136,24 @@ export const PrayerTimeView: React.FC = () => {
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-4 pb-24 space-y-2">
-                    {regencies.length === 0 ? (
-                        <div className="text-center py-10 text-slate-500">Memuat wilayah...</div>
+                    {isRegenciesLoading ? (
+                        <div className="text-center py-10 flex flex-col items-center gap-3">
+                            <div className="w-8 h-8 border-4 border-primary-100 border-t-primary-500 rounded-full animate-spin"></div>
+                            <p className="text-slate-500 text-sm">Memuat wilayah...</p>
+                        </div>
+                    ) : regencyError ? (
+                        <div className="bg-red-50 text-red-600 p-4 rounded-xl text-center text-sm border border-red-100">
+                            {regencyError}
+                            <button
+                                onClick={() => {
+                                    setRegencies([]);
+                                    setRegencyError(null);
+                                }}
+                                className="block mx-auto mt-2 text-primary-600 font-bold"
+                            >
+                                Coba Lagi
+                            </button>
+                        </div>
                     ) : filteredRegencies.length === 0 ? (
                         <div className="text-center py-10 text-slate-500">Wilayah tidak ditemukan.</div>
                     ) : (
@@ -204,24 +242,24 @@ export const PrayerTimeView: React.FC = () => {
                 ) : schedule ? (
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                         {[
-                            { label: 'Imsyak', time: schedule.imsyak, icon: '🌙' },
-                            { label: 'Shubuh', time: schedule.shubuh, icon: '✨' },
-                            { label: 'Terbit', time: schedule.terbit, icon: '🌅' },
-                            { label: 'Dhuha', time: schedule.dhuha, icon: '☀️' },
-                            { label: 'Dzuhur', time: schedule.dzuhur, icon: '🏙️' },
-                            { label: 'Ashr', time: schedule.ashr, icon: '🌆' },
-                            { label: 'Maghrib', time: schedule.maghrib, icon: '🌇' },
-                            { label: 'Isya', time: schedule.isya, icon: '🌌' }
+                            { label: 'Imsyak', time: schedule.imsyak },
+                            { label: 'Shubuh', time: schedule.shubuh },
+                            { label: 'Terbit', time: schedule.terbit },
+                            { label: 'Dhuha', time: schedule.dhuha },
+                            { label: 'Dzuhur', time: schedule.dzuhur },
+                            { label: 'Ashr', time: schedule.ashr },
+                            { label: 'Maghrib', time: schedule.maghrib },
+                            { label: 'Isya', time: schedule.isya }
                         ].map((item, idx) => (
                             <div
                                 key={item.label}
                                 className={`flex items-center justify-between p-4 ${idx !== 7 ? 'border-b border-slate-50' : ''} ${nextPrayer?.name === item.label ? 'bg-primary-50/50' : ''}`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <span className="text-xl">{item.icon}</span>
+                                    <ClockIcon className={`w-5 h-5 ${nextPrayer?.name === item.label ? 'text-primary-500' : 'text-slate-400'}`} />
                                     <span className="font-semibold text-slate-700">{item.label}</span>
                                 </div>
-                                <span className={`text-lg font-bold tabular-nums ${nextPrayer?.name === item.label ? 'text-primary-600' : 'text-slate-900'}`}>
+                                <span className={`text-lg font-semibold tabular-nums ${nextPrayer?.name === item.label ? 'text-primary-600' : 'text-slate-900'}`}>
                                     {item.time}
                                 </span>
                             </div>

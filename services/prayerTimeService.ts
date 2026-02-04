@@ -16,7 +16,7 @@ export interface PrayerSchedule {
 }
 
 const API_KEY = '9yXJNYmQagtGd2OmTzo1KP2e4p98Hzz57BzYO223UckjedFDov';
-const BASE_URL = 'https://use.api.co.id';
+const BASE_URL = '/api-sholat';
 
 const headers = {
     'x-api-co-id': API_KEY,
@@ -25,13 +25,26 @@ const headers = {
 
 export const fetchRegencies = async (): Promise<Regency[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/regional/indonesia/prayer-times/regencies?page=1&limit=100`, { headers });
-        const data = await response.json();
+        const url = `${BASE_URL}/regional/indonesia/prayer-times/regencies?page=1&limit=100`;
+        console.log('Fetching regencies from:', url);
+        const response = await fetch(url, { headers });
+        console.log('Regencies response status:', response.status);
 
-        if (data.status === 'success' && data.data) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && !contentType.includes('application/json')) {
+            console.error('Expected JSON but got:', contentType);
+            const text = await response.text();
+            console.log('Response body snippet:', text.substring(0, 100));
+            return [];
+        }
+
+        const data = await response.json();
+        console.log('Regencies data:', data);
+
+        if (data.is_success && data.data) {
             return data.data.map((item: any) => ({
-                code: item.regency_code,
-                name: item.regency_name
+                code: item.code,
+                name: item.name
             }));
         }
         return [];
@@ -50,11 +63,11 @@ export const searchRegencies = async (query: string): Promise<Regency[]> => {
         const response = await fetch(`${BASE_URL}/regional/indonesia/prayer-times/regencies?page=1&limit=150`, { headers });
         const data = await response.json();
 
-        if (data.status === 'success' && data.data) {
+        if (data.is_success && data.data) {
             return data.data
                 .map((item: any) => ({
-                    code: item.regency_code,
-                    name: item.regency_name
+                    code: item.code,
+                    name: item.name
                 }))
                 .filter((r: Regency) => r.name.toLowerCase().includes(query.toLowerCase()));
         }
@@ -71,7 +84,7 @@ export const fetchDailyPrayerTime = async (regencyCode: string, date: string): P
         const response = await fetch(`${BASE_URL}/regional/indonesia/prayer-times?regency_code=${regencyCode}&start_date=${date}&end_date=${date}`, { headers });
         const data = await response.json();
 
-        if (data.status === 'success' && data.data && data.data.length > 0) {
+        if (data.is_success && data.data && data.data.length > 0) {
             const item = data.data[0];
             return {
                 imsyak: item.imsyak,
