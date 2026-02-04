@@ -1,62 +1,30 @@
 import React, { useState, useEffect } from 'react';
-
-interface BeforeInstallPromptEvent extends Event {
-    prompt: () => Promise<void>;
-    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export const InstallPrompt: React.FC = () => {
-    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+    const { deferredPrompt, isInstalled, installApp } = useInstallPrompt();
     const [showPrompt, setShowPrompt] = useState(false);
-    const [isInstalled, setIsInstalled] = useState(false);
 
     useEffect(() => {
-        // Check if already installed
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            setIsInstalled(true);
-            return;
-        }
-
-        // Check if user dismissed before (respect for 7 days)
-        const dismissedAt = localStorage.getItem('pwa-install-dismissed');
-        if (dismissedAt) {
-            const daysSinceDismissed = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
-            if (daysSinceDismissed < 7) {
-                return;
+        if (deferredPrompt && !isInstalled) {
+            // Check dismissal
+            const dismissedAt = localStorage.getItem('pwa-install-dismissed');
+            if (dismissedAt) {
+                const daysSinceDismissed = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
+                if (daysSinceDismissed < 7) return;
             }
-        }
 
-        const handler = (e: Event) => {
-            e.preventDefault();
-            setDeferredPrompt(e as BeforeInstallPromptEvent);
             // Show prompt after 3 seconds
-            setTimeout(() => setShowPrompt(true), 3000);
-        };
-
-        window.addEventListener('beforeinstallprompt', handler);
-
-        // Listen for successful install
-        window.addEventListener('appinstalled', () => {
-            setIsInstalled(true);
+            const timer = setTimeout(() => setShowPrompt(true), 3000);
+            return () => clearTimeout(timer);
+        } else {
             setShowPrompt(false);
-            setDeferredPrompt(null);
-        });
-
-        return () => {
-            window.removeEventListener('beforeinstallprompt', handler);
-        };
-    }, []);
+        }
+    }, [deferredPrompt, isInstalled]);
 
     const handleInstall = async () => {
-        if (!deferredPrompt) return;
-
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-
-        if (outcome === 'accepted') {
-            setShowPrompt(false);
-        }
-        setDeferredPrompt(null);
+        await installApp();
+        setShowPrompt(false);
     };
 
     const handleDismiss = () => {

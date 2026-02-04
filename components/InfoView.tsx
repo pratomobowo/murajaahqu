@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnlineVisitors } from '../hooks/useOnlineVisitors';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export const InfoView: React.FC = () => {
     const navigate = useNavigate();
     const visitorCount = useOnlineVisitors();
+    const { deferredPrompt, installApp } = useInstallPrompt();
 
     return (
         <div className="flex flex-col h-full bg-slate-50">
@@ -63,12 +65,20 @@ export const InfoView: React.FC = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                            <div
+                                onClick={deferredPrompt ? installApp : undefined}
+                                className={`bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10 ${deferredPrompt ? 'cursor-pointer hover:bg-white/20 active:scale-95 transition-all ring-2 ring-white/20' : ''}`}
+                            >
                                 <div className="text-white font-bold text-xs mb-1 flex items-center gap-1">
                                     <span className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center text-[10px]">1</span>
                                     Android
                                 </div>
-                                <p className="text-emerald-50 text-[10px] leading-tight">Klik titik tiga di browser Anda, lalu pilih <span className="font-bold">"Instal Aplikasi"</span>.</p>
+                                <p className="text-emerald-50 text-[10px] leading-tight">
+                                    {deferredPrompt
+                                        ? <span className="font-bold text-white underline decoration-dashed underline-offset-2">Klik disini untuk Install Aplikasi</span>
+                                        : <span>Klik titik tiga di browser Anda, lalu pilih <span className="font-bold">"Instal Aplikasi"</span>.</span>
+                                    }
+                                </p>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
                                 <div className="text-white font-bold text-xs mb-1 flex items-center gap-1">
