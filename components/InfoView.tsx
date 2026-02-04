@@ -64,29 +64,24 @@ export const InfoView: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <div
-                                onClick={deferredPrompt ? installApp : undefined}
-                                className={`bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10 ${deferredPrompt ? 'cursor-pointer hover:bg-white/20 active:scale-95 transition-all ring-2 ring-white/20' : ''}`}
-                            >
-                                <div className="text-white font-bold text-xs mb-1 flex items-center gap-1">
-                                    <span className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center text-[10px]">1</span>
-                                    Android
+                        <div className="mt-2">
+                            {deferredPrompt ? (
+                                <button
+                                    onClick={installApp}
+                                    className="w-full bg-white text-emerald-600 font-bold py-3 px-4 rounded-xl shadow-lg active:scale-95 transition-all hover:bg-emerald-50 flex items-center justify-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                    </svg>
+                                    Install Aplikasi
+                                </button>
+                            ) : (
+                                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+                                    <p className="text-emerald-50 text-xs leading-relaxed text-center">
+                                        Untuk pengguna Android, klik menu browser (titik tiga) lalu pilih <span className="font-bold text-white">"Instal Aplikasi"</span> atau <span className="font-bold text-white">"Tambahkan ke Layar Utama"</span>.
+                                    </p>
                                 </div>
-                                <p className="text-emerald-50 text-[10px] leading-tight">
-                                    {deferredPrompt
-                                        ? <span className="font-bold text-white underline decoration-dashed underline-offset-2">Klik disini untuk Install Aplikasi</span>
-                                        : <span>Klik titik tiga di browser Anda, lalu pilih <span className="font-bold">"Instal Aplikasi"</span>.</span>
-                                    }
-                                </p>
-                            </div>
-                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-                                <div className="text-white font-bold text-xs mb-1 flex items-center gap-1">
-                                    <span className="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center text-[10px]">2</span>
-                                    iOS (iPhone)
-                                </div>
-                                <p className="text-emerald-50 text-[10px] leading-tight">Klik tombol <span className="font-bold">Share</span>, lalu pilih <span className="font-bold">"Add to Home Screen"</span>.</p>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
