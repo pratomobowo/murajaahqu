@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getToken, onMessage } from 'firebase/messaging';
 import { ref, set } from 'firebase/database';
 import { messaging, database } from '../lib/firebase';
+import { checkAndTriggerNotifications } from '../services/reminderService';
 
 export const usePushNotifications = () => {
     const [token, setToken] = useState<string | null>(null);
@@ -58,7 +59,19 @@ export const usePushNotifications = () => {
                         });
                     }
                 });
-                return () => unsubscribe();
+
+                // Check for local reminders every minute
+                const interval = setInterval(() => {
+                    checkAndTriggerNotifications();
+                }, 60000);
+
+                // Initial check
+                checkAndTriggerNotifications();
+
+                return () => {
+                    unsubscribe();
+                    clearInterval(interval);
+                };
             }
         }
     }, [messaging]);

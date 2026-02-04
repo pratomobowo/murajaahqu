@@ -62,6 +62,7 @@ export const PrayerTimeView: React.FC = () => {
                 const data = await fetchDailyPrayerTime(regency.code, today);
                 if (data) {
                     setSchedule(data);
+                    localStorage.setItem('murajaahqu_sholat_schedule', JSON.stringify(data));
                 } else {
                     setError('Gagal memuat jadwal shalat.');
                 }
