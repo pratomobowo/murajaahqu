@@ -1,12 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOnlineVisitors } from '../hooks/useOnlineVisitors';
-import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 export const InfoView: React.FC = () => {
     const navigate = useNavigate();
     const visitorCount = useOnlineVisitors();
-    const { deferredPrompt, installApp } = useInstallPrompt();
 
     return (
         <div className="flex flex-col h-full bg-slate-50">
