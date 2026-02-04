@@ -43,46 +43,7 @@ export const InfoView: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Install App Card */}
-                <div className="bg-gradient-to-br from-primary-600 to-emerald-500 rounded-2xl p-6 shadow-md border border-primary-100/20 mb-4 overflow-hidden relative">
-                    {/* Decorative Background Elements */}
-                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
-                    <div className="absolute -left-4 -bottom-4 w-24 h-24 bg-emerald-400/20 rounded-full blur-2xl"></div>
 
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="text-white font-bold text-lg">Install di HP Anda</h3>
-                                <p className="text-emerald-50 text-xs">Akses MurajaahQu lebih cepat & mudah</p>
-                            </div>
-                        </div>
-
-                        <div className="mt-2">
-                            {deferredPrompt ? (
-                                <button
-                                    onClick={installApp}
-                                    className="w-full bg-white text-emerald-600 font-bold py-3 px-4 rounded-xl shadow-lg active:scale-95 transition-all hover:bg-emerald-50 flex items-center justify-center gap-2"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                    </svg>
-                                    Install Aplikasi
-                                </button>
-                            ) : (
-                                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-                                    <p className="text-emerald-50 text-xs leading-relaxed text-center">
-                                        Untuk pengguna Android, klik menu browser (titik tiga) lalu pilih <span className="font-bold text-white">"Instal Aplikasi"</span> atau <span className="font-bold text-white">"Tambahkan ke Layar Utama"</span>.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
 
                 {/* Visitor Statistics Card */}
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-4">
