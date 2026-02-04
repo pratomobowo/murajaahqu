@@ -13,6 +13,7 @@ import { BookmarksView } from './components/BookmarksView';
 import { DzikirDoaView } from './components/DzikirDoaView';
 import { PrayerTimeView } from './components/PrayerTimeView';
 import { BookmarkProvider } from './context/BookmarkContext';
+import { usePushNotifications } from './hooks/usePushNotifications';
 
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ const SPLASH_EXPIRY_HOURS = 24;
 
 function App() {
   const location = useLocation();
+  usePushNotifications();
 
   // Check if splash should be shown based on last visit time
   const [showSplash, setShowSplash] = useState(() => {

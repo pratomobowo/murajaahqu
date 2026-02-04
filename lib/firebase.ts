@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase } from "firebase/database";
+import { getMessaging, Messaging, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDMdT4w-la2gBROQcgY_kZlpYbkB-15jYQ",
@@ -18,4 +19,15 @@ const app = initializeApp(firebaseConfig);
 export const database = getDatabase(app);
 export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
+// Initialize Messaging
+let messaging: Messaging | null = null;
+if (typeof window !== 'undefined') {
+    isSupported().then(supported => {
+        if (supported) {
+            messaging = getMessaging(app);
+        }
+    });
+}
+
+export { messaging };
 export default app;
