@@ -12,7 +12,7 @@ import {
 } from '../sifatHurufData';
 import confetti from 'canvas-confetti';
 
-const TIMER_SECONDS = 10;
+const TIMER_SECONDS = 15;
 const STATS_KEY = 'murojaahSifatStats';
 
 type SifatQuizType = 'HURUF_SIFAT' | 'SIFAT_HURUF' | 'LAWAN';
@@ -23,6 +23,7 @@ interface SifatQuestion {
   correctAnswer: string;
   options: string[];
   hurufOptions: boolean; // true = opsi berupa huruf hijaiyah (render besar)
+  infoJawaban: React.ReactNode; // penjelasan jawaban benar, tampil setelah menjawab
 }
 
 // Fisher-Yates shuffle (lebih merata dari sort random)
@@ -73,6 +74,7 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
     let correctAnswer: string;
     let options: string[];
     let hurufOptions = false;
+    let infoJawaban: React.ReactNode;
 
     if (type === 'HURUF_SIFAT') {
       // Tipe 1: huruf X pada dimensi tertentu bersifat apa?
@@ -89,6 +91,13 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
           pada &ldquo;{dimensi.label}&rdquo; bersifat...
         </span>
       );
+      infoJawaban = (
+        <span>
+          <span className="font-arabic text-xl font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[correctAnswer]}</span>{' '}
+          <span className="text-slate-500">({correctAnswer})</span>
+          <span className="block text-slate-500 text-xs mt-0.5">{SIFAT_DESKRIPSI[correctAnswer]}</span>
+        </span>
+      );
     } else if (type === 'SIFAT_HURUF') {
       // Tipe 2: huruf apa yang memiliki sifat X?
       const sifat = randomOf(SEMUA_SIFAT);
@@ -101,9 +110,21 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
       hurufOptions = true;
       questionText = (
         <span>
-          Huruf yang bersifat <span className="font-bold">{sifat}</span> adalah...
+          Huruf yang bersifat{' '}
+          <span className="font-arabic text-2xl font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[sifat]}</span>{' '}
+          <span className="text-slate-500">({sifat})</span>{' '}
+          adalah...
           <span className="block text-sm font-normal text-slate-500 mt-2">
             {SIFAT_DESKRIPSI[sifat]}
+          </span>
+        </span>
+      );
+      infoJawaban = (
+        <span>
+          <span className="font-arabic text-2xl font-bold" dir="rtl">{benar.huruf}</span>{' '}
+          <span className="text-slate-500 capitalize">({benar.latin})</span>
+          <span className="block text-slate-500 text-xs mt-0.5">
+            Salah satu huruf yang bersifat {SIFAT_ARAB[sifat]} ({sifat})
           </span>
         </span>
       );
@@ -117,12 +138,22 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
       options = shuffle([correctAnswer, ...distractors]);
       questionText = (
         <span>
-          Lawan dari sifat <span className="font-bold">{sifat}</span> adalah...
+          Lawan dari sifat{' '}
+          <span className="font-arabic text-2xl font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[sifat]}</span>{' '}
+          <span className="text-slate-500">({sifat})</span>{' '}
+          adalah...
+        </span>
+      );
+      infoJawaban = (
+        <span>
+          <span className="font-arabic text-xl font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[correctAnswer]}</span>{' '}
+          <span className="text-slate-500">({correctAnswer})</span>
+          <span className="block text-slate-500 text-xs mt-0.5">{SIFAT_DESKRIPSI[correctAnswer]}</span>
         </span>
       );
     }
 
-    setQuestion({ type, questionText, correctAnswer, options, hurufOptions });
+    setQuestion({ type, questionText, correctAnswer, options, hurufOptions, infoJawaban });
     setSelectedOption(null);
     setIsAnswered(false);
     setIsCorrect(false);
@@ -306,7 +337,7 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
       </div>
 
       {/* Question Card */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 pb-32">
+      <div className="flex-1 overflow-y-auto px-4 py-4 pb-40">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 text-center mb-4 relative overflow-hidden">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-sky-50 rounded-full opacity-50 pointer-events-none"></div>
 
@@ -358,6 +389,12 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
       {/* Result Action Sheet */}
       {isAnswered && (
         <div className="fixed bottom-20 left-0 right-0 z-40 mx-auto max-w-md px-6">
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 px-4 py-3 mb-2 text-center text-sm text-slate-700">
+            <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+              {isCorrect ? 'Tepat!' : 'Jawaban benar'}
+            </span>
+            {question.infoJawaban}
+          </div>
           <button
             onClick={generateQuestion}
             className={`w-full py-4 rounded-2xl font-bold text-white shadow-lg shadow-sky-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${

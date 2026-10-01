@@ -3,7 +3,7 @@ import { Stats } from '../types';
 import { MAKHRAJ, MAKHRAJ_UMUM, Makhraj, makhrajDariHuruf, HURUF_SATU_MAKHRAJ, SEMUA_HURUF_MAKHRAJ, namaMakhrajUmum } from '../makhrajData';
 import confetti from 'canvas-confetti';
 
-const TIMER_SECONDS = 10;
+const TIMER_SECONDS = 15;
 const STATS_KEY = 'murojaahMakhrajStats';
 
 type MakhrajQuizType = 'HURUF_KE_MAKHRAJ' | 'MAKHRAJ_KE_HURUF' | 'MAKHRAJ_KE_UMUM';
@@ -14,6 +14,7 @@ interface MakhrajQuestion {
   correctAnswer: string;
   options: string[];
   hurufOptions: boolean;
+  infoJawaban: React.ReactNode; // penjelasan jawaban benar, tampil setelah menjawab
 }
 
 const loadStats = (): Stats => {
@@ -55,6 +56,12 @@ function generateQuestion(): MakhrajQuestion {
       correctAnswer: benar.nama,
       options: shuffle([benar.nama, ...distractors]),
       hurufOptions: false,
+      infoJawaban: (
+        <span>
+          <strong>{benar.nama}</strong>
+          <span className="block text-gray-500 text-xs mt-0.5">{benar.deskripsi}</span>
+        </span>
+      ),
     };
   }
 
@@ -74,22 +81,36 @@ function generateQuestion(): MakhrajQuestion {
       correctAnswer: benarHuruf,
       options: shuffle([benarHuruf, ...distractors]),
       hurufOptions: true,
+      infoJawaban: (
+        <span>
+          <span className="font-arabic text-2xl font-bold" dir="rtl">{benarHuruf}</span>
+          <span className="block text-gray-500 text-xs mt-0.5">Keluar dari makhraj {m.nama}</span>
+        </span>
+      ),
     };
   }
 
   // Makhraj tertentu termasuk kelompok umum apa?
   const m: Makhraj = randomOf(MAKHRAJ);
   const benarUmum = namaMakhrajUmum(m.umum);
+  const umum = MAKHRAJ_UMUM.find((u) => u.id === m.umum);
   return {
     type: 'MAKHRAJ_KE_UMUM',
     questionText: (
       <>
-        Makhraj <strong>"{m.nama}"</strong> termasuk kelompok...
+        Makhraj <strong>&quot;{m.nama}&quot;</strong> termasuk kelompok...
       </>
     ),
     correctAnswer: benarUmum,
     options: shuffle(MAKHRAJ_UMUM.map((u) => u.nama)),
     hurufOptions: false,
+    infoJawaban: (
+      <span>
+        <span className="font-arabic text-xl font-bold" dir="rtl" lang="ar">{umum?.arab}</span>{' '}
+        <span className="text-gray-500">({benarUmum})</span>
+        <span className="block text-gray-500 text-xs mt-0.5">{umum?.arti}</span>
+      </span>
+    ),
   };
 }
 
@@ -104,6 +125,12 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [showResult, setShowResult] = useState(false);
   const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    } catch { /* abaikan jika storage tidak tersedia */ }
+  }, [stats]);
 
   const nextQuestion = useCallback(() => {
     setQuestion(generateQuestion());
@@ -123,11 +150,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
         if (t <= 1) {
           if (timerRef.current) window.clearInterval(timerRef.current);
           setShowResult(true);
-          setStats((prev) => {
-            const next = { ...prev, totalAnswered: prev.totalAnswered + 1, streak: 0 };
-            localStorage.setItem(STATS_KEY, JSON.stringify(next));
-            return next;
-          });
+          setStats((prev) => ({ ...prev, totalAnswered: prev.totalAnswered + 1, streak: 0 }));
           return 0;
         }
         return t - 1;
@@ -146,23 +169,15 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
     const isCorrect = opt === question.correctAnswer;
     if (isCorrect) {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#14b8a6', '#2dd4bf', '#5eead4'] });
-      setStats((prev) => {
-        const next = {
-          ...prev,
-          totalAnswered: prev.totalAnswered + 1,
-          correct: prev.correct + 1,
-          streak: prev.streak + 1,
-          bestStreak: Math.max(prev.bestStreak, prev.streak + 1),
-        };
-        localStorage.setItem(STATS_KEY, JSON.stringify(next));
-        return next;
-      });
+      setStats((prev) => ({
+        ...prev,
+        totalAnswered: prev.totalAnswered + 1,
+        correct: prev.correct + 1,
+        streak: prev.streak + 1,
+        bestStreak: Math.max(prev.bestStreak, prev.streak + 1),
+      }));
     } else {
-      setStats((prev) => {
-        const next = { ...prev, totalAnswered: prev.totalAnswered + 1, streak: 0 };
-        localStorage.setItem(STATS_KEY, JSON.stringify(next));
-        return next;
-      });
+      setStats((prev) => ({ ...prev, totalAnswered: prev.totalAnswered + 1, streak: 0 }));
     }
   };
 
@@ -243,9 +258,10 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
       {showResult && (
         <div className={`rounded-xl p-4 mb-4 text-center font-semibold ${selected === question?.correctAnswer ? 'bg-teal-100 text-teal-700' : 'bg-red-100 text-red-700'}`}>
           {selected === question?.correctAnswer ? 'MasyaAllah, benar!' : timeLeft === 0 && !selected ? 'Waktu habis!' : 'Kurang tepat.'}
-          {selected !== question?.correctAnswer && question && (
-            <span className="block mt-1 font-normal text-sm">
-              Jawaban: <strong>{question && renderOptionContent(question.correctAnswer)}</strong>
+          {question?.infoJawaban && (
+            <span className="block mt-2 font-normal text-sm bg-white/60 rounded-lg px-3 py-2">
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Jawaban</span>
+              {question.infoJawaban}
             </span>
           )}
           <button
