@@ -23,19 +23,21 @@ export const SifatHurufStudy: React.FC = () => {
       </div>
 
       <div className="bg-white rounded-2xl shadow p-4">
-        <h3 className="font-bold text-gray-800 mb-2">5 dimensi sifat</h3>
-        <div className="flex flex-col gap-2">
+        <h3 className="font-bold text-gray-800 mb-1">5 dimensi sifat</h3>
+        <p className="text-sm text-gray-500 mb-3">Setiap huruf dinilai dari 5 sisi berikut:</p>
+        <div className="flex flex-col gap-2.5">
           {DIMENSI_SIFAT.map((d) => (
-            <div key={d.id} className="text-sm">
-              <span className="font-semibold text-sky-700">{d.label}: </span>
-              <span className="text-gray-600">
-                {d.values.map((v, i) => (
-                  <React.Fragment key={v}>
-                    {i > 0 && ' / '}
-                    <IstilahSifat nama={v} />
-                  </React.Fragment>
+            <div key={d.id} className="bg-slate-50 rounded-xl p-3">
+              <p className="font-bold text-sky-700 text-sm">{d.label}</p>
+              <p className="text-xs text-gray-500 mb-2">{d.tentang}</p>
+              <div className="flex flex-col gap-1.5">
+                {d.values.map((v) => (
+                  <div key={v} className="flex items-center justify-between gap-2">
+                    <IstilahSifat nama={v} className="font-semibold text-gray-800 text-sm" />
+                    <span className="text-xs text-gray-500 text-right">{SIFAT_DESKRIPSI[v]}</span>
+                  </div>
                 ))}
-              </span>
+              </div>
             </div>
           ))}
           <div className="text-sm">

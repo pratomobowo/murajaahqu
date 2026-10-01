@@ -50,15 +50,16 @@ export const HURUF_SIFAT: HurufSifat[] = [
 export interface DimensiSifat {
   id: 'nafas' | 'suara' | 'lidah' | 'langit' | 'ucap';
   label: string;
+  tentang: string; // penjelasan singkat apa yang diukur dimensi ini
   values: string[];
 }
 
 export const DIMENSI_SIFAT: DimensiSifat[] = [
-  { id: 'nafas', label: 'Nafas', values: ['Hams', 'Jahr'] },
-  { id: 'suara', label: 'Suara', values: ['Syiddah', 'Tawassuth', 'Rakhawah'] },
-  { id: 'lidah', label: 'Pangkal lidah', values: ['Istila', 'Istifal'] },
-  { id: 'langit', label: 'Langit-langit', values: ['Ithbaq', 'Infitah'] },
-  { id: 'ucap', label: 'Pengucapan', values: ['Idzlaq', 'Ishmat'] },
+  { id: 'nafas', label: 'Nafas', tentang: 'Mengalir atau tertahannya nafas saat huruf diucapkan', values: ['Hams', 'Jahr'] },
+  { id: 'suara', label: 'Suara', tentang: 'Tertahan atau mengalirnya suara di makhraj', values: ['Syiddah', 'Tawassuth', 'Rakhawah'] },
+  { id: 'lidah', label: 'Pangkal lidah', tentang: 'Terangkat atau turunnya pangkal lidah saat pengucapan', values: ['Istila', 'Istifal'] },
+  { id: 'langit', label: 'Langit-langit', tentang: 'Merapat atau merenggangnya lidah dari langit-langit mulut', values: ['Ithbaq', 'Infitah'] },
+  { id: 'ucap', label: 'Pengucapan', tentang: 'Ringan atau beratnya huruf saat diucapkan', values: ['Idzlaq', 'Ishmat'] },
 ];
 
 // Pasangan sifat yang memiliki lawan (Tawassuth tidak punya lawan karena sifat tengah)
