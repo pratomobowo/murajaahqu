@@ -30,8 +30,8 @@ export const TopikHub: React.FC<TopikHubProps> = ({
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] max-w-md mx-auto w-full bg-slate-50">
-      <div className={`bg-gradient-to-r ${headerClass} px-4 pt-4 pb-4 text-white sticky top-0 z-20 shadow-sm`}>
+    <div className="flex flex-col h-full w-full bg-slate-50">
+      <div className={`flex-none bg-gradient-to-r ${headerClass} px-4 pt-4 pb-4 text-white z-20 shadow-sm`}>
         <div className="flex items-center gap-2">
           <button onClick={onBack} className="p-2 -ml-2 text-white/80 hover:text-white" aria-label="Kembali">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
@@ -62,7 +62,7 @@ export const TopikHub: React.FC<TopikHubProps> = ({
           </button>
         </div>
       </div>
-      <div className="flex-1 p-4">{materi}</div>
+      <div className="flex-1 overflow-y-auto p-4">{materi}</div>
     </div>
   );
 };

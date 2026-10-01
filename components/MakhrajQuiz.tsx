@@ -170,8 +170,8 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
   const progress = (timeLeft / TIMER_SECONDS) * 100;
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] p-4 max-w-md mx-auto w-full">
-      <div className="flex items-center justify-between mb-2">
+    <div className="flex flex-col h-full w-full bg-slate-50">
+      <div className="flex-none flex items-center justify-between px-4 pt-4 mb-2">
         <button onClick={onBack} className="p-2 -ml-2 text-gray-500 hover:text-gray-800" aria-label="Kembali">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -183,6 +183,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
         </div>
       </div>
 
+      <div className="flex-1 overflow-y-auto px-4 py-2">
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-4">
         <div className="bg-gradient-to-r from-teal-600 to-teal-500 p-5 text-white">
           <p className="text-teal-100 text-sm mb-2">Tempat keluarnya suara</p>
@@ -239,8 +240,9 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
           </button>
         </div>
       )}
+      </div>
 
-      <div className="mt-auto grid grid-cols-3 gap-3 text-center">
+      <div className="flex-none grid grid-cols-3 gap-3 text-center px-4 pb-4 pt-2">
         <div className="bg-white rounded-xl p-3 shadow">
           <p className="text-2xl font-bold text-gray-800">{stats.totalAnswered}</p>
           <p className="text-xs text-gray-500">Soal</p>
