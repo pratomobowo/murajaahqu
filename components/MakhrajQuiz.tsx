@@ -242,7 +242,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
       )}
       </div>
 
-      <div className="flex-none grid grid-cols-3 gap-3 text-center px-4 pb-4 pt-2">
+      <div className="flex-none grid grid-cols-3 gap-3 text-center px-4 pb-24 pt-2">
         <div className="bg-white rounded-xl p-3 shadow">
           <p className="text-2xl font-bold text-gray-800">{stats.totalAnswered}</p>
           <p className="text-xs text-gray-500">Soal</p>

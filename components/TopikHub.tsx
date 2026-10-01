@@ -62,7 +62,7 @@ export const TopikHub: React.FC<TopikHubProps> = ({
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-4">{materi}</div>
+      <div className="flex-1 overflow-y-auto p-4 pb-24">{materi}</div>
     </div>
   );
 };
