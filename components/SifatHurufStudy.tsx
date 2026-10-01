@@ -5,7 +5,7 @@ import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI, SIFAT_ARAB } from '../sifa
 const IstilahSifat: React.FC<{ nama: string; className?: string; title?: string }> = ({ nama, className = '', title }) => (
   <span className={className} title={title}>
     {nama}{' '}
-    <span className="font-arabic" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>
+    <span className="font-arabic text-lg" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>
   </span>
 );
 
