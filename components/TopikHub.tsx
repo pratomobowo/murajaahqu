@@ -58,7 +58,7 @@ export const TopikHub: React.FC<TopikHubProps> = ({
               isTab('kuis') ? `bg-white ${tabActiveClass} shadow` : 'bg-white/20 text-white hover:bg-white/30'
             }`}
           >
-            Kuis
+            Murajaah
           </button>
         </div>
       </div>

@@ -237,7 +237,7 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
             </button>
             <div>
               <h2 className="font-bold text-white text-lg leading-tight">
-                Kuis Sifat Huruf
+                Murajaah Sifat Huruf
               </h2>
               <p className="text-xs text-white/70">
                 Latihan sifat-sifat huruf hijaiyah

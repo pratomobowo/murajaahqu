@@ -28,7 +28,7 @@ export const MurojaahView: React.FC = () => {
     return (
       <TopikHub
         title="Sifat Huruf"
-        subtitle="Materi & kuis sifat huruf hijaiyah"
+        subtitle="Materi & murajaah sifat huruf hijaiyah"
         headerClass="from-sky-600 to-sky-500"
         tabActiveClass="text-sky-600"
         onBack={() => navigate('/murajaah')}
@@ -42,7 +42,7 @@ export const MurojaahView: React.FC = () => {
     return (
       <TopikHub
         title="Makhraj Huruf"
-        subtitle="Materi & kuis tempat keluar huruf"
+        subtitle="Materi & murajaah tempat keluar huruf"
         headerClass="from-teal-600 to-teal-500"
         tabActiveClass="text-teal-600"
         onBack={() => navigate('/murajaah')}

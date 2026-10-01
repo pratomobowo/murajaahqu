@@ -10,7 +10,7 @@ export const SifatHurufStudy: React.FC = () => {
         <p className="text-sm text-gray-600 leading-relaxed">
           Setiap huruf hijaiyah punya 5 sifat berpasangan (atau tiga untuk suara)
           plus sifat tambahan yang tidak punya lawan. Hafalkan per huruf di bawah,
-          lalu uji dengan tab Kuis.
+          lalu uji dengan tab Murajaah.
         </p>
       </div>
 

@@ -177,7 +177,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </button>
-        <h2 className="text-lg font-bold text-gray-800">Kuis Makhraj Huruf</h2>
+        <h2 className="text-lg font-bold text-gray-800">Murajaah Makhraj Huruf</h2>
         <div className="w-10 text-right">
           {stats.streak > 1 && <span className="text-sm font-bold text-teal-600">🔥{stats.streak}</span>}
         </div>
