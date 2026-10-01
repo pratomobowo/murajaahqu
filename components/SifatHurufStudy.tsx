@@ -1,5 +1,13 @@
 import React from 'react';
-import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI } from '../sifatHurufData';
+import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI, SIFAT_ARAB } from '../sifatHurufData';
+
+// Istilah sifat + tulisan Arabnya, mis. "Jahr جهر".
+const IstilahSifat: React.FC<{ nama: string; className?: string; title?: string }> = ({ nama, className = '', title }) => (
+  <span className={className} title={title}>
+    {nama}{' '}
+    <span className="font-arabic" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>
+  </span>
+);
 
 // Halaman materi sifat huruf: modul hafalan 29 huruf per dimensi sifat.
 export const SifatHurufStudy: React.FC = () => {
@@ -20,12 +28,26 @@ export const SifatHurufStudy: React.FC = () => {
           {DIMENSI_SIFAT.map((d) => (
             <div key={d.id} className="text-sm">
               <span className="font-semibold text-sky-700">{d.label}: </span>
-              <span className="text-gray-600">{d.values.join(' / ')}</span>
+              <span className="text-gray-600">
+                {d.values.map((v, i) => (
+                  <React.Fragment key={v}>
+                    {i > 0 && ' / '}
+                    <IstilahSifat nama={v} />
+                  </React.Fragment>
+                ))}
+              </span>
             </div>
           ))}
           <div className="text-sm">
             <span className="font-semibold text-sky-700">Tambahan: </span>
-            <span className="text-gray-600">Shafir, Qalqalah, Liin, Inhiraf, Takrir, Tafasysyi, Istithalah</span>
+            <span className="text-gray-600">
+              {['Shafir', 'Qalqalah', 'Liin', 'Inhiraf', 'Takrir', 'Tafasysyi', 'Istithalah'].map((v, i) => (
+                <React.Fragment key={v}>
+                  {i > 0 && ', '}
+                  <IstilahSifat nama={v} />
+                </React.Fragment>
+              ))}
+            </span>
           </div>
         </div>
       </div>
@@ -45,14 +67,21 @@ export const SifatHurufStudy: React.FC = () => {
               return (
                 <div key={d.id} className="flex items-center justify-between text-sm bg-slate-50 rounded-lg px-3 py-1.5">
                   <span className="text-gray-500">{d.label}</span>
-                  <span className="font-bold text-gray-800" title={SIFAT_DESKRIPSI[value]}>{value}</span>
+                  <IstilahSifat nama={value} className="font-bold text-gray-800" title={SIFAT_DESKRIPSI[value]} />
                 </div>
               );
             })}
             {h.tambahan.length > 0 && (
               <div className="flex items-center justify-between text-sm bg-amber-50 rounded-lg px-3 py-1.5">
                 <span className="text-gray-500">Tambahan</span>
-                <span className="font-bold text-amber-700">{h.tambahan.join(', ')}</span>
+                <span className="font-bold text-amber-700">
+                  {h.tambahan.map((t, i) => (
+                    <React.Fragment key={t}>
+                      {i > 0 && ', '}
+                      <IstilahSifat nama={t} />
+                    </React.Fragment>
+                  ))}
+                </span>
               </div>
             )}
           </div>

@@ -105,6 +105,27 @@ export const SIFAT_DESKRIPSI: Record<string, string> = {
   Istithalah: 'Suara memanjang dari sisi lidah',
 };
 
+export const SIFAT_ARAB: Record<string, string> = {
+  Hams: 'همس',
+  Jahr: 'جهر',
+  Syiddah: 'شدة',
+  Tawassuth: 'توسط',
+  Rakhawah: 'رخاوة',
+  Istila: 'استعلاء',
+  Istifal: 'استفال',
+  Ithbaq: 'إطباق',
+  Infitah: 'انفتاح',
+  Idzlaq: 'إذلاق',
+  Ishmat: 'إصمات',
+  Shafir: 'صفير',
+  Qalqalah: 'قلقلة',
+  Liin: 'لين',
+  Inhiraf: 'انحراف',
+  Takrir: 'تكرير',
+  Tafasysyi: 'تفشي',
+  Istithalah: 'استطالة',
+};
+
 // Cek apakah sebuah huruf memiliki sifat tertentu (pasangan maupun tanpa lawan)
 export function hurufPunyaSifat(h: HurufSifat, sifat: string): boolean {
   return (
