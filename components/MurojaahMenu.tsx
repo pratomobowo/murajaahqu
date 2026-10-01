@@ -1,7 +1,7 @@
 import React from 'react';
 import { QuizMode, QuizType } from '../types';
 
-type MenuMode = QuizMode | 'HAFALAN' | 'TEBAK_AYAT';
+type MenuMode = QuizMode | 'HAFALAN' | 'TEBAK_AYAT' | 'SIFAT_HURUF' | 'MAKHRAJ';
 
 interface MurojaahMenuProps {
   onSelectMode: (mode: MenuMode) => void;
@@ -30,6 +30,28 @@ export const MurojaahMenu: React.FC<MurojaahMenuProps> = ({ onSelectMode }) => {
         </svg>
       ),
       iconBg: 'bg-violet-100',
+    },
+    {
+      mode: 'SIFAT_HURUF',
+      title: 'Kuis Sifat Huruf',
+      subtitle: 'Materi & kuis sifat huruf hijaiyah',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-sky-600">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 019.656-2.576 50.636 50.636 0 019.656 2.576m-15.482 0L12 3l7.746 4.147" />
+        </svg>
+      ),
+      iconBg: 'bg-sky-100',
+    },
+    {
+      mode: 'MAKHRAJ',
+      title: 'Kuis Makhraj Huruf',
+      subtitle: 'Materi & kuis tempat keluar huruf',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-teal-600">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+        </svg>
+      ),
+      iconBg: 'bg-teal-100',
     },
     {
       mode: 'RANDOM' as QuizMode,
