@@ -18,7 +18,8 @@ export const MakhrajStudy: React.FC = () => {
         return (
           <div key={u.id}>
             <h3 className="font-bold text-teal-700 mb-2 px-1">
-              {u.nama} <span className="font-normal text-gray-500 text-sm">({u.arti})</span>
+              <span className="font-arabic text-xl" dir="rtl" lang="ar">{u.arab}</span>{' '}
+              <span className="font-normal text-gray-500 text-sm">({u.nama} - {u.arti})</span>
             </h3>
             <div className="flex flex-col gap-2">
               {daftar.map((m) => (

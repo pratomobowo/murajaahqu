@@ -7,6 +7,7 @@ import {
   LAWAN_SIFAT,
   SEMUA_SIFAT,
   SIFAT_DESKRIPSI,
+  SIFAT_ARAB,
   hurufPunyaSifat,
 } from '../sifatHurufData';
 import confetti from 'canvas-confetti';
@@ -202,6 +203,15 @@ export const SifatHurufQuiz: React.FC<SifatHurufQuizProps> = ({ onBack }) => {
       return (
         <span className="font-arabic text-4xl" dir="rtl">
           {option}
+        </span>
+      );
+    }
+    // Opsi berupa nama sifat: Arab sebagai utama, latin dalam kurung.
+    if (SIFAT_ARAB[option]) {
+      return (
+        <span>
+          <span className="font-arabic text-xl font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[option]}</span>{' '}
+          <span className="font-normal text-gray-500 text-sm">({option})</span>
         </span>
       );
     }

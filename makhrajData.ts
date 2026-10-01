@@ -3,15 +3,16 @@ export type MakhrajUmumId = 'Jauf' | 'Halq' | 'Lisan' | 'Syafatan' | 'Khaisyum';
 export interface MakhrajUmum {
   id: MakhrajUmumId;
   nama: string;
+  arab: string;
   arti: string;
 }
 
 export const MAKHRAJ_UMUM: MakhrajUmum[] = [
-  { id: 'Jauf', nama: 'Al-Jauf', arti: 'Rongga mulut' },
-  { id: 'Halq', nama: 'Al-Halq', arti: 'Tenggorokan' },
-  { id: 'Lisan', nama: 'Al-Lisan', arti: 'Lidah' },
-  { id: 'Syafatan', nama: 'Asy-Syafatan', arti: 'Dua bibir' },
-  { id: 'Khaisyum', nama: 'Al-Khaisyum', arti: 'Rongga hidung' },
+  { id: 'Jauf', nama: 'Al-Jauf', arab: 'الجوف', arti: 'Rongga mulut' },
+  { id: 'Halq', nama: 'Al-Halq', arab: 'الحلق', arti: 'Tenggorokan' },
+  { id: 'Lisan', nama: 'Al-Lisan', arab: 'اللسان', arti: 'Lidah' },
+  { id: 'Syafatan', nama: 'Asy-Syafatan', arab: 'الشفتان', arti: 'Dua bibir' },
+  { id: 'Khaisyum', nama: 'Al-Khaisyum', arab: 'الخيشوم', arti: 'Rongga hidung' },
 ];
 
 export interface Makhraj {

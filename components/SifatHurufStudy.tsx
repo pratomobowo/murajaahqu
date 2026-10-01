@@ -1,11 +1,11 @@
 import React from 'react';
 import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI, SIFAT_ARAB } from '../sifatHurufData';
 
-// Istilah sifat + tulisan Arabnya, mis. "Jahr جهر".
+// Istilah sifat: tulisan Arab sebagai utama, latin dalam kurung. Mis. "جهر (Jahr)".
 const IstilahSifat: React.FC<{ nama: string; className?: string; title?: string }> = ({ nama, className = '', title }) => (
   <span className={className} title={title}>
-    {nama}{' '}
-    <span className="font-arabic text-lg" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>
+    <span className="font-arabic text-lg font-bold" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>{' '}
+    <span className="font-normal text-gray-500 text-sm">({nama})</span>
   </span>
 );
 

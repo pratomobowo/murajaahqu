@@ -169,6 +169,22 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
   const accuracy = stats.totalAnswered > 0 ? Math.round((stats.correct / stats.totalAnswered) * 100) : 0;
   const progress = (timeLeft / TIMER_SECONDS) * 100;
 
+  // Opsi nama kelompok makhraj: Arab sebagai utama, latin dalam kurung.
+  const renderOptionContent = (opt: string) => {
+    const arab = question?.type === 'MAKHRAJ_KE_UMUM'
+      ? MAKHRAJ_UMUM.find((u) => u.nama === opt)?.arab ?? ''
+      : '';
+    if (arab) {
+      return (
+        <span>
+          <span className="font-arabic text-xl font-bold" dir="rtl" lang="ar">{arab}</span>{' '}
+          <span className="font-normal text-gray-500 text-sm">({opt})</span>
+        </span>
+      );
+    }
+    return opt;
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-slate-50">
       <div className="flex-none flex items-center justify-between px-4 pt-4 mb-2">
@@ -218,7 +234,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
               `}
               dir={question.hurufOptions ? 'rtl' : undefined}
             >
-              {opt}
+              {renderOptionContent(opt)}
             </button>
           );
         })}
@@ -229,7 +245,7 @@ export const MakhrajQuiz: React.FC<Props> = ({ onBack }) => {
           {selected === question?.correctAnswer ? 'MasyaAllah, benar!' : timeLeft === 0 && !selected ? 'Waktu habis!' : 'Kurang tepat.'}
           {selected !== question?.correctAnswer && question && (
             <span className="block mt-1 font-normal text-sm">
-              Jawaban: <strong>{question.correctAnswer}</strong>
+              Jawaban: <strong>{question && renderOptionContent(question.correctAnswer)}</strong>
             </span>
           )}
           <button
