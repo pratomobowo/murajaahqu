@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI, SIFAT_ARAB, LAWAN_SIFAT } from '../sifatHurufData';
+import { HURUF_SIFAT, DIMENSI_SIFAT, SIFAT_DESKRIPSI, SIFAT_ARAB } from '../sifatHurufData';
 
 // Context agar setiap istilah sifat bisa membuka hotspot tanpa prop drilling.
 const SifatHotspotContext = createContext<(nama: string) => void>(() => {});
@@ -22,18 +22,12 @@ const IstilahSifat: React.FC<{ nama: string; className?: string }> = ({ nama, cl
   );
 };
 
-// Cari label dimensi untuk sebuah istilah (mis. 'Syiddah' -> 'Suara').
-function dimensiOf(nama: string): string | null {
-  const d = DIMENSI_SIFAT.find((dim) => dim.values.includes(nama));
-  return d ? d.label : null;
-}
-
-// Hotspot: popup bawah berisi arti istilah sifat. Tutup via tombol X atau ketuk area gelap.
+// Hotspot: popup kecil berisi arti singkat istilah sifat.
+// Tutup via tombol X atau ketuk area gelap.
 const SifatHotspotPopup: React.FC<{
   nama: string | null;
   onClose: () => void;
-  onOpen: (nama: string) => void;
-}> = ({ nama, onClose, onOpen }) => {
+}> = ({ nama, onClose }) => {
   useEffect(() => {
     if (!nama) return;
     const onKey = (e: KeyboardEvent) => {
@@ -50,13 +44,10 @@ const SifatHotspotPopup: React.FC<{
 
   if (!nama) return null;
 
-  const lawan = LAWAN_SIFAT[nama];
-  const dimensi = dimensiOf(nama);
-
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label={`Arti istilah ${nama}`}>
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-5 pb-6 shadow-xl">
+      <div className="relative bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-5 shadow-xl">
         <button
           type="button"
           onClick={onClose}
@@ -68,28 +59,11 @@ const SifatHotspotPopup: React.FC<{
           </svg>
         </button>
 
-        <p className="font-arabic text-4xl font-bold text-gray-800" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</p>
-        <p className="text-sm text-gray-500 mt-1">({nama})</p>
-        {dimensi ? (
-          <p className="text-xs text-sky-600 font-semibold mt-1">Dimensi: {dimensi}</p>
-        ) : (
-          <p className="text-xs text-amber-600 font-semibold mt-1">Sifat tambahan</p>
-        )}
-        <p className="text-sm text-gray-700 leading-relaxed mt-3">{SIFAT_DESKRIPSI[nama] ?? ''}</p>
-
-        {lawan && (
-          <div className="mt-4 pt-3 border-t border-slate-100">
-            <p className="text-xs text-gray-400 mb-1.5">Lawan katanya:</p>
-            <button
-              type="button"
-              onClick={() => onOpen(lawan)}
-              className="inline-flex items-center gap-2 bg-slate-50 hover:bg-sky-50 rounded-xl px-3 py-1.5 transition-colors"
-            >
-              <span className="font-arabic text-xl font-bold text-gray-800" dir="rtl" lang="ar">{SIFAT_ARAB[lawan] ?? ''}</span>
-              <span className="text-sm font-semibold text-gray-700">({lawan})</span>
-            </button>
-          </div>
-        )}
+        <p className="text-sm text-gray-500 mb-1">
+          <span className="font-arabic font-bold text-gray-700" dir="rtl" lang="ar">{SIFAT_ARAB[nama] ?? ''}</span>{' '}
+          ({nama})
+        </p>
+        <p className="text-base text-gray-800 leading-relaxed pr-8">{SIFAT_DESKRIPSI[nama] ?? ''}</p>
       </div>
     </div>
   );
@@ -182,7 +156,7 @@ export const SifatHurufStudy: React.FC = () => {
         ))}
       </div>
 
-      <SifatHotspotPopup nama={hotspot} onClose={closeHotspot} onOpen={openHotspot} />
+      <SifatHotspotPopup nama={hotspot} onClose={closeHotspot} />
     </SifatHotspotContext.Provider>
   );
 };
