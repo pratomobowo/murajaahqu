@@ -45,9 +45,32 @@ const SifatHotspotPopup: React.FC<{
   if (!nama) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label={`Arti istilah ${nama}`}>
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-5 shadow-xl">
+    <>
+      <style>{`
+        @keyframes sifat-hotspot-slide-up {
+          from { transform: translateY(2rem); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes sifat-hotspot-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+      <div
+        className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center pb-[calc(5rem+env(safe-area-inset-bottom))] sm:pb-0"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Arti istilah ${nama}`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40"
+          style={{ animation: 'sifat-hotspot-fade-in 0.25s ease-out' }}
+          onClick={onClose}
+        />
+        <div
+          className="relative bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-5 shadow-xl"
+          style={{ animation: 'sifat-hotspot-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1)' }}
+        >
         <button
           type="button"
           onClick={onClose}
@@ -64,8 +87,9 @@ const SifatHotspotPopup: React.FC<{
           ({nama})
         </p>
         <p className="text-base text-gray-800 leading-relaxed pr-8">{SIFAT_DESKRIPSI[nama] ?? ''}</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
