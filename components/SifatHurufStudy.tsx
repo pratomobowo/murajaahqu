@@ -57,7 +57,7 @@ const SifatHotspotPopup: React.FC<{
         }
       `}</style>
       <div
-        className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center pb-[calc(5rem+env(safe-area-inset-bottom))] sm:pb-0"
+        className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center"
         role="dialog"
         aria-modal="true"
         aria-label={`Arti istilah ${nama}`}
@@ -68,7 +68,7 @@ const SifatHotspotPopup: React.FC<{
           onClick={onClose}
         />
         <div
-          className="relative bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-sm p-5 shadow-xl"
+          className="relative w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-5 shadow-xl mb-[calc(4rem+env(safe-area-inset-bottom))] sm:mb-0"
           style={{ animation: 'sifat-hotspot-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1)' }}
         >
         <button
